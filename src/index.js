@@ -7,14 +7,12 @@ import { persistor, store } from './store';
 import App from './App';
 
 ReactDOM.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<Provider store={store}>
-				<PersistGate persistor={persistor}>
-					<App />
-				</PersistGate>
-			</Provider>
-		</BrowserRouter>
-	</React.StrictMode>,
-	document.getElementById('root')
+  <BrowserRouter>
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
+  </BrowserRouter>,
+  document.getElementById('root')
 );

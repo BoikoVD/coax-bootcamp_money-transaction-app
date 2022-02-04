@@ -12,31 +12,31 @@ import MyProfile from './pages/MyProfile/MyProfile';
 import NotFound from './pages/NotFound/NotFound';
 
 function App() {
-	const [state, setState] = React.useState(false);
+  const [state, setState] = React.useState(false);
 
-	if (state) {
-		return (
-			<Routes>
-				<Route path="/" element={<Layout />} >
-					<Route index element={<Dashboard />} />
-					<Route path="contacts" element={<Contacts />} />
-					<Route path="transactions" element={<Transactions />} />
-					<Route path="my-profile" element={<MyProfile />} />
-					<Route path="not-found" element={<NotFound />} />
-					<Route path="*" element={<Navigate to="/not-found" replace />} />
-				</Route>
-			</Routes>
-		);
-	} else {
-		return (
-			<Routes>
-				<Route path="/login" element={<Login />} />
-				<Route path="/registration" element={<Registration />} />
-				<Route path="/registration/complete" element={<RegistrationCompleteMessage />} />
-				<Route path="*" element={<Navigate to="/login" replace />} />
-			</Routes>
-		);
-	}
+  if (state) {
+    return (
+      <Routes>
+        <Route path="/" element={<Layout />} >
+          <Route index element={<Dashboard />} />
+          <Route path="contacts" element={<Contacts />} />
+          <Route path="transactions" element={<Transactions />} />
+          <Route path="my-profile" element={<MyProfile />} />
+          <Route path="not-found" element={<NotFound />} />
+          <Route path="*" element={<Navigate to="/not-found" replace />} />
+        </Route>
+      </Routes>
+    );
+  } else {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/registration/complete" element={<RegistrationCompleteMessage />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
+  }
 }
 
 export default App;

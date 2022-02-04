@@ -7,22 +7,22 @@ import rootReducer from './reducers/rootReducer';
 import rootSaga from './sagas/rootSaga';
 
 const persistConfig = {
-	key: 'userData',
-	storage,
+  key: 'userData',
+  storage,
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-const SagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware();
 
 export const store = createStore(
-	persistedReducer,
-	compose(
-		applyMiddleware(SagaMiddleware),
-		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-	)
+  persistedReducer,
+  compose(
+    applyMiddleware(sagaMiddleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
 );
 
 export const persistor = persistStore(store);
 
-SagaMiddleware.run(rootSaga);
+sagaMiddleware.run(rootSaga);
