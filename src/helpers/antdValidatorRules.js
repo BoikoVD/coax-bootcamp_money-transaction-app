@@ -13,6 +13,10 @@ export const lastNameRules = [
   { required: true, message: 'Please input your last name!' },
   { whitespace: true, message: 'Please input your last name!' },
 ];
+export const loginPasswordRules = [
+  { required: true, message: 'Please input your password!' },
+  { min: 8, message: 'Minimum number of characters 8' },
+];
 export const regPasswordRules = [
   { required: true, message: 'Please input your password!' },
   { min: 8, message: 'Minimum number of characters 8' },

@@ -1,84 +1,51 @@
 import React from 'react';
-import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
+import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Login.module.scss';
 
 
 function Login() {
 
   const onFinish = (values) => {
-    console.log('Success:', values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log('Received values of form: ', values);
   };
 
   return (
     <div className={classes.wrapper}>
       <Form
+        name="loginForm"
         size="large"
-        name="login"
-        wrapperCol={{ span: 16 }}
-        labelCol={{ span: 8 }}
-        initialValues={{
-          remember: true,
-        }}
+        className={classes.loginForm}
+        initialValues={{ remember: true }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
       >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your email!',
-            },
-          ]}
-        >
-          <Input />
+        <Form.Item name="email" rules={validationRules.emailRules}>
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Email"
+          />
+        </Form.Item>
+        <Form.Item name="password" rules={validationRules.loginPasswordRules}>
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Form.Item name="remember" valuePropName="checked" noStyle>
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
         </Form.Item>
 
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: 'Please input your password!',
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-
-        <Form.Item
-          name="remember"
-          valuePropName="checked"
-          wrapperCol={{
-            offset: 8,
-            span: 10,
-          }}
-        >
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 8,
-          }}
-
-        >
-          <Button type="primary" htmlType="submit">
-            Login
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className={classes.loginFormButton}>
+            Log in
           </Button>
+          Or <Link to="/registration" className={classes.link}>register now!</Link>
         </Form.Item>
-        <Col span={8} offset={8}>
-          <Link to="/registration" className={classes.link}>Registration</Link>
-        </Col>
       </Form>
     </div>
   )

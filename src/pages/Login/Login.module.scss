@@ -9,9 +9,19 @@
 }
 
 .link {
+  display: inline-block;
+  margin-top: 15px;
 	@media (any-hover: hover) {
 		&:hover {
 			text-decoration: underline;
 		}
 	}
+}
+
+.loginForm {
+  max-width: 300px;
+}
+
+.loginFormButton {
+  width: 100%;
 }
