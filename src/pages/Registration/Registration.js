@@ -4,7 +4,7 @@ import { Form, Input, Button, Spin } from 'antd';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import { authApi, profileApi } from '../../http/api';
 import RegistrationModal from '../../components/RegistrationModal/RegistrationModal';
-import classes from './Registration.module.css';
+import classes from './Registration.module.scss';
 
 function Registration() {
   const [isLoading, setIsLoading] = React.useState(false);

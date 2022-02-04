@@ -19,15 +19,17 @@
 
 .form {
 	max-width: 360px;
+
+	@media (max-width: 575px) {
+		max-width: 320px;
+	}
 }
 
-@media (max-width: 575px) {
-	.link:hover {
-		text-decoration: underline;
-	}
-
-	.form {
-		max-width: 320px;
+.link {
+	@media (any-hover: hover) {
+		&:hover {
+			text-decoration: underline;
+		}
 	}
 }
 
@@ -37,10 +39,4 @@
 
 	margin-top: 10px;
 	margin-bottom: 10px;
-}
-
-@media (any-hover: hover) {
-	.link:hover {
-		text-decoration: underline;
-	}
 }
