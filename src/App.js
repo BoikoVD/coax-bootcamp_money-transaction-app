@@ -1,43 +1,54 @@
 import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Layout from './pages/Layout';
-import Login from './pages/Login/Login';
-import Registration from './pages/Registration/Registration';
-import RegistrationCompleteMessage from './pages/RegistrationCompleteMessage/RegistrationCompleteMessage';
-import Dashboard from './pages/Dashboard/Dashboard';
-import Contacts from './pages/Contacts/Contacts';
-import Transactions from './pages/Transactions/Transactions';
-import MyProfile from './pages/MyProfile/MyProfile';
-import NotFound from './pages/NotFound/NotFound';
+import { useDispatch, useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
+import { Spin } from 'antd';
+import { getUserRequest, getAllProfilesRequest } from './http/api';
+import * as actions from './store/actions/actions';
+import AppRouter from './router/AppRouter';
 import './assets/styles/App.less';
 
 function App() {
+  const [isLoading, setIsLoading] = React.useState(false);
   const isAuth = useSelector(state => state.userReducer.isAuth);
+  const dispatch = useDispatch();
 
-  if (isAuth) {
-    return (
-      <Routes>
-        <Route path="/" element={<Layout />} >
-          <Route index element={<Dashboard />} />
-          <Route path="contacts" element={<Contacts />} />
-          <Route path="transactions" element={<Transactions />} />
-          <Route path="my-profile" element={<MyProfile />} />
-          <Route path="not-found" element={<NotFound />} />
-          <Route path="*" element={<Navigate to="/not-found" replace />} />
-        </Route>
-      </Routes>
-    );
-  } else {
-    return (
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/registration/complete" element={<RegistrationCompleteMessage />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    );
-  }
+  React.useEffect(async () => {
+    setIsLoading(true);
+    const accessToken = Cookies.get('accessToken');
+    if (accessToken) {
+      try {
+        const user = await getUserRequest(accessToken);
+        const userId = user.data.id;
+
+        const usersData = await getAllProfilesRequest();
+        let userData;
+        for (let i of usersData.data) {
+          if (i.user === userId) {
+            userData = i;
+          }
+        }
+        dispatch(actions.setUserProfileDataAC(userData));
+        dispatch(actions.setIsAuthAC(true));
+      } catch (e) {
+        console.log("CHECK ERROR: ", e);
+      }
+    }
+    setIsLoading(false);
+  }, []);
+
+  return (
+    <>
+      {
+        isLoading
+          ?
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100vw", height: "100vh" }}>
+            <Spin size="large" />
+          </div>
+          :
+          <AppRouter isAuth={isAuth} />
+      }
+    </>
+  )
 }
 
 export default App;

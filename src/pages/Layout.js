@@ -1,5 +1,5 @@
 import React from 'react';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 import { Button } from 'antd';
 import { setIsAuthAC, setUserProfileDataAC } from '../store/actions/actions';
 import { useDispatch } from 'react-redux';
