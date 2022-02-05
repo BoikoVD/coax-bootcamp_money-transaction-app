@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Form, Input, Button, Spin } from 'antd';
 import * as validationRules from '../../helpers/antdValidatorRules';
-import { authApi, profileApi } from '../../http/api';
+import { signupRequest, createProfileRequest } from '../../http/api';
 import RegistrationModal from '../../components/RegistrationModal/RegistrationModal';
 import classes from './Registration.module.scss';
 
@@ -14,19 +14,16 @@ function Registration() {
   const onFinish = async ({ email, firstName, lastName, password }) => {
     setIsLoading(true);
     try {
-      const createdUser = await authApi.post('/signup', { email, password }).then((res) => {
-        return res;
-      });
+      const createdUser = await signupRequest(email, password);
       const userId = createdUser.data.user.id;
-      await profileApi.post('/profile', { firstName, lastName, user: userId, email }).then((res) => {
-        if (res.status === 201) {
-          setErrorMessage(null);
-          setIsModalVisible(true);
-        } else {
-          setErrorMessage('Something went wrong');
-          setIsModalVisible(true);
-        }
-      });
+      const createProfileRes = createProfileRequest(firstName, lastName, userId, email);
+      if (createProfileRes.status === 201) {
+        setErrorMessage(null);
+        setIsModalVisible(true);
+      } else {
+        setErrorMessage('Something went wrong');
+        setIsModalVisible(true);
+      }
     } catch (e) {
       console.log('REGISTRATION ERROR: ', e);
       setErrorMessage(e.message);
