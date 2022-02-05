@@ -7,8 +7,9 @@ import rootReducer from './reducers/rootReducer';
 import rootSaga from './sagas/rootSaga';
 
 const persistConfig = {
-  key: 'userData',
+  key: 'user',
   storage,
+  whitelist: ['navigation']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

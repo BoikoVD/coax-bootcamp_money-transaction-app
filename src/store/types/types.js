@@ -1,1 +1,3 @@
-export const SET_USER = "SET_USER";
+export const SET_IS_AUTH = "SET_IS_AUTH";
+export const SET_USER_PROFILE_DATA = "SET_USER_PROFILE_DATA";
+export const USER_LOGIN_REQUEST = "USER_LOGIN_REQUEST";

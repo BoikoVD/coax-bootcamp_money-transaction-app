@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
-import './assets/styles/App.less';
+import { useSelector } from 'react-redux';
 import Layout from './pages/Layout';
 import Login from './pages/Login/Login';
 import Registration from './pages/Registration/Registration';
@@ -10,11 +10,12 @@ import Contacts from './pages/Contacts/Contacts';
 import Transactions from './pages/Transactions/Transactions';
 import MyProfile from './pages/MyProfile/MyProfile';
 import NotFound from './pages/NotFound/NotFound';
+import './assets/styles/App.less';
 
 function App() {
-  const [state, setState] = React.useState(false);
+  const isAuth = useSelector(state => state.userReducer.isAuth);
 
-  if (state) {
+  if (isAuth) {
     return (
       <Routes>
         <Route path="/" element={<Layout />} >

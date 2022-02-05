@@ -5,8 +5,11 @@ const defaultState = {
     id: null,
     email: null,
     firstName: null,
-    lastName: null
+    lastName: null,
+    user: null,
+    created_at: null
   },
+  isAuth: false,
   userProfiles: [],
   isLoading: false,
   error: ''
@@ -14,9 +17,13 @@ const defaultState = {
 
 export default function userReducer(state = defaultState, action) {
   switch (action.type) {
-    case types.SET_USER:
+    case types.SET_IS_AUTH:
       return {
-        ...state, tasks: action.payload
+        ...state, isAuth: action.payload
+      }
+    case types.SET_USER_PROFILE_DATA:
+      return {
+        ...state, currentProfile: action.payload
       }
     default:
       return state;
