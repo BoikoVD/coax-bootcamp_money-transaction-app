@@ -40,3 +40,14 @@ export const regConfiirmPasswordRules = [
     }
   })
 ];
+export const resetConfiirmPasswordRules = [
+  { required: true, message: 'Please input the same passwords!' },
+  ({ getFieldValue }) => ({
+    validator(_, value) {
+      if (!value || getFieldValue("newPassword") === value) {
+        return Promise.resolve()
+      }
+      return Promise.reject("Passwords are not the same!")
+    }
+  })
+];
