@@ -83,3 +83,18 @@ export const createProfileRequest = async (firstName, lastName, userId, email) =
   });
   return data;
 };
+
+export const updateProfileDataRequest = async (accessToken, newFirstName, newLastName, profileId) => {
+  const data = await axios.patch(`${API_PROFILE_URL}/profile?id=eq.${profileId}`, {
+    firstName: newFirstName,
+    lastName: newLastName,
+  }, {
+    headers: {
+      'apikey': process.env.React_App_API_KEY,
+      'Authorization': `Bearer ${accessToken}`
+    }
+  }).then((res) => {
+    return res;
+  });
+  return data;
+};

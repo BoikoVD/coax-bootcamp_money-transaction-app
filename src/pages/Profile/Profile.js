@@ -64,6 +64,7 @@ function Profile() {
               isCurrent={isCurrent}
               firstName={profileData.firstName}
               lastName={profileData.lastName}
+              profileId={profileData.id}
             />
             <div className={classes.info}>
               <span>Email: </span>{profileData.email}

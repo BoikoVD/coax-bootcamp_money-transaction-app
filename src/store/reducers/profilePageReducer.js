@@ -18,6 +18,14 @@ export default function profilePageReducer(state = defaultState, action) {
       return {
         ...state, profileData: action.payload.profileData, isCurrent: action.payload.isCurrent
       }
+    case types.SET_UPDATED_CURRENT_PROFILE_DATA:
+      return {
+        ...state, profileData: {
+          ...state.profileData,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName
+        }
+      }
     default:
       return state;
   }

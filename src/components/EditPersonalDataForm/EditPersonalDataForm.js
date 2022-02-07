@@ -1,27 +1,40 @@
 import React from 'react';
-import { Button, Modal, Form, Input } from 'antd';
+import PropTypes from 'prop-types';
+import { Form, Input } from 'antd';
+import * as validationRules from '../../helpers/antdValidatorRules';
 
-function EditPersonalDataForm() {
+function EditPersonalDataForm({ form, firstName, lastName }) {
 
   return (
     <Form
       form={form}
       layout="vertical"
       name="form_in_modal"
-      initialValues={{ modifier: 'public' }}
     >
       <Form.Item
-        name="title"
-        label="Title"
-        rules={[{ required: true, message: 'Please input the title of collection!' }]}
+        name="newFirstName"
+        label="New first name"
+        initialValue={firstName}
+        rules={validationRules.firstNameRules}
       >
         <Input />
       </Form.Item>
-      <Form.Item name="description" label="Description">
-        <Input type="textarea" />
+      <Form.Item
+        name="newLastName"
+        label="New last name"
+        initialValue={lastName}
+        rules={validationRules.lastNameRules}
+      >
+        <Input />
       </Form.Item>
     </Form>
   )
+}
+
+EditPersonalDataForm.propTypes = {
+  form: PropTypes.object.isRequired,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string
 }
 
 export default EditPersonalDataForm;

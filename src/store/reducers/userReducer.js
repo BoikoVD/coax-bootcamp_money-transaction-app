@@ -25,6 +25,14 @@ export default function userReducer(state = defaultState, action) {
       return {
         ...state, currentProfile: action.payload
       }
+    case types.SET_UPDATED_PROFILE_DATA:
+      return {
+        ...state, currentProfile: {
+          ...state.currentProfile,
+          firstName: action.payload.firstName,
+          lastName: action.payload.lastName
+        }
+      }
     default:
       return state;
   }
