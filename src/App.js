@@ -1,6 +1,6 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { getUserRequest, getProfileRequest } from './http/api';
 import * as actions from './store/actions/actions';
@@ -24,7 +24,7 @@ function App() {
         dispatch(actions.setProfileDataAC(profileData.data[0], true));
         dispatch(actions.setIsAuthAC(true));
       } catch (e) {
-        console.log("CHECK ERROR: ", e);
+        console.log("CHECK AUTH ERROR: ", e);
       }
     }
     setIsLoading(false);
@@ -35,7 +35,13 @@ function App() {
       {
         isLoading
           ?
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "100vw", height: "100vh" }}>
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100vw",
+            height: "100vh"
+          }}>
             <Spin size="large" />
           </div>
           :

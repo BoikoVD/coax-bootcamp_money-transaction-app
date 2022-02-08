@@ -1,21 +1,19 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
-import { Form, Input, Button, Checkbox, Spin, Modal } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Form, Input, Button, Checkbox, Spin, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { getProfileRequest, loginApiRequest } from '../../http/api';
 import * as actions from '../../store/actions/actions';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Login.module.scss';
 
-
 function Login() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
   const dispatch = useDispatch();
 
-  const onFinish = async ({ email, password, remember }) => {
+  const loginHandle = async ({ email, password, remember }) => {
     setIsLoading(true);
     try {
       const user = await loginApiRequest(email, password);
@@ -35,13 +33,12 @@ function Login() {
       dispatch(actions.setIsAuthAC(true));
     } catch (e) {
       setIsLoading(false);
-      setIsModalVisible(true);
       console.log('LOGIN ERROR: ', e);
+      message.error(
+        "An error has occurred. Please check that you have entered the data correctly and try again",
+        10
+      );
     }
-  };
-
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
   };
 
   return (
@@ -49,9 +46,9 @@ function Login() {
       <Form
         name="loginForm"
         size="large"
-        className={classes.loginForm}
         initialValues={{ remember: true }}
-        onFinish={onFinish}
+        onFinish={loginHandle}
+        className={classes.loginForm}
       >
         <Form.Item name="email" rules={validationRules.emailRules}>
           <Input
@@ -60,7 +57,7 @@ function Login() {
           />
         </Form.Item>
         <Form.Item name="password" rules={validationRules.loginPasswordRules}>
-          <Input
+          <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Password"
@@ -73,25 +70,17 @@ function Login() {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className={classes.loginFormButton} disabled={isLoading}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={isLoading}
+            block
+          >
             {isLoading ? <Spin /> : "Log in"}
           </Button>
           Or <Link to="/registration" className={classes.link}>register now!</Link>
         </Form.Item>
       </Form>
-      <Modal
-        title="Something is wrong"
-        visible={isModalVisible}
-        onOk={handleCloseModal}
-        onCancel={handleCloseModal}
-        footer={null}
-        bodyStyle={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-        centered
-      >
-        <p>An error has occurred</p>
-        <p>Please check that you have entered the data correctly and try again</p>
-        <Button type="primary" onClick={handleCloseModal}>OK</Button>
-      </Modal>
     </div>
   )
 }

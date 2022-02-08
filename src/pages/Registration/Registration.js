@@ -1,34 +1,34 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Form, Input, Button, Spin } from 'antd';
-import * as validationRules from '../../helpers/antdValidatorRules';
+import { Link, useNavigate } from 'react-router-dom';
+import { Form, Input, Button, Spin, Modal, message } from 'antd';
 import { signupRequest, createProfileRequest } from '../../http/api';
-import RegistrationModal from '../../components/RegistrationModal/RegistrationModal';
+import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Registration.module.scss';
 
 function Registration() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState(null);
+  const navigate = useNavigate();
 
-  const onFinish = async ({ email, firstName, lastName, password }) => {
+  const registerHandle = async ({ email, firstName, lastName, password }) => {
     setIsLoading(true);
     try {
       const createdUser = await signupRequest(email, password);
       const userId = createdUser.data.user.id;
-      const createProfileRes = createProfileRequest(firstName, lastName, userId, email);
-      setErrorMessage(null);
+      await createProfileRequest(firstName, lastName, userId, email);
       setIsModalVisible(true);
     } catch (e) {
       console.log('REGISTRATION ERROR: ', e);
-      setErrorMessage(e.message);
-      setIsModalVisible(true);
+      message.error(`${e.message}. Please try again later`, 10);
     }
     setIsLoading(false);
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+  const goToLoginHandle = () => {
+    navigate("/login");
+  }
+  const closeModalHandle = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -39,27 +39,49 @@ function Registration() {
           name="registrationForm"
           labelCol={{ span: 10 }}
           wrapperCol={{ span: 14 }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
+          onFinish={registerHandle}
           autoComplete="off"
           className={classes.form}
         >
-          <Form.Item label="Email" name="email" rules={validationRules.emailRules}>
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={validationRules.emailRules}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="First name" name="firstName" rules={validationRules.firstNameRules}>
+          <Form.Item
+            label="First name"
+            name="firstName"
+            rules={validationRules.firstNameRules}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="Last name" name="lastName" rules={validationRules.lastNameRules} >
+          <Form.Item
+            label="Last name"
+            name="lastName"
+            rules={validationRules.lastNameRules}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="Password" name="password" rules={validationRules.regPasswordRules} >
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={validationRules.regPasswordRules}
+          >
             <Input.Password />
           </Form.Item>
-          <Form.Item label="Confirm password" name="confirmPassword" dependencies={["password"]} rules={validationRules.regConfiirmPasswordRules} >
+          <Form.Item
+            label="Confirm password"
+            name="confirmPassword"
+            rules={validationRules.regConfiirmPasswordRules}
+            dependencies={["password"]}
+          >
             <Input.Password />
           </Form.Item>
-          <Form.Item wrapperCol={{ sm: { span: 14, offset: 10 }, xs: { offset: 0 } }}>
+          <Form.Item
+            wrapperCol={{ sm: { span: 14, offset: 10 }, xs: { offset: 0 } }}
+          >
             <Button type="primary" htmlType="submit" block disabled={isLoading}>
               {isLoading ? <Spin /> : "Register"}
             </Button>
@@ -69,7 +91,20 @@ function Registration() {
           </Form.Item>
         </Form>
       </div>
-      <RegistrationModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} error={errorMessage} />
+      <Modal
+        title="Registration complete"
+        visible={isModalVisible}
+        centered
+        style={{ maxWidth: "300px" }}
+        bodyStyle={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+        cancelText="Cancel"
+        onCancel={closeModalHandle}
+        okButtonProps={{ style: { width: "100px" } }}
+        okText="Go to Login"
+        onOk={goToLoginHandle}
+      >
+        <p>Registration complete, you can login now </p>
+      </Modal>
     </div>
   )
 }

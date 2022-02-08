@@ -40,7 +40,7 @@ function Profile() {
       navigate("/not-found");
       console.log("PROFILE PAGE ERROR: ", e);
     }
-  }, []);
+  }, [id]);
 
   return (
     isLoading
