@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import profilePageReducer from './profilePageReducer';
 import userReducer from './userReducer';
+import profileReducer from './profileReducer';
 
 const rootReducer = combineReducers({
   userReducer,
-  profilePageReducer
+  profileReducer
 });
 
 export default rootReducer;

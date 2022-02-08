@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { Form, Input, Button, Checkbox, Spin, Modal } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { getAllProfilesRequest, loginApiRequest } from '../../http/api';
+import { getProfileRequest, loginApiRequest } from '../../http/api';
 import * as actions from '../../store/actions/actions';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Login.module.scss';
@@ -21,21 +21,17 @@ function Login() {
       const user = await loginApiRequest(email, password);
 
       const userId = user.data.user.id;
+      const userEmail = user.data.user.email;
       const accessToken = user.data.access_token;
       const expiresIn = user.data.expires_in / 60 / 60 / 24;
 
-      const usersData = await getAllProfilesRequest();
-      let userData;
-      for (let i of usersData.data) {
-        if (i.user === userId) {
-          userData = i;
-        }
-      }
+      const profileData = await getProfileRequest(userId, accessToken, "user");
 
       if (remember) {
         Cookies.set('accessToken', `${accessToken}`, { expires: expiresIn });
       }
-      dispatch(actions.setUserProfileDataAC(userData));
+      dispatch(actions.setUserDataAC({ id: userId, email: userEmail }));
+      dispatch(actions.setProfileDataAC(profileData.data[0], true));
       dispatch(actions.setIsAuthAC(true));
     } catch (e) {
       setIsLoading(false);

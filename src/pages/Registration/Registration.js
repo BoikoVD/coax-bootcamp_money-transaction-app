@@ -17,13 +17,8 @@ function Registration() {
       const createdUser = await signupRequest(email, password);
       const userId = createdUser.data.user.id;
       const createProfileRes = createProfileRequest(firstName, lastName, userId, email);
-      if (createProfileRes.status === 201) {
-        setErrorMessage(null);
-        setIsModalVisible(true);
-      } else {
-        setErrorMessage('Something went wrong');
-        setIsModalVisible(true);
-      }
+      setErrorMessage(null);
+      setIsModalVisible(true);
     } catch (e) {
       console.log('REGISTRATION ERROR: ', e);
       setErrorMessage(e.message);

@@ -1,18 +1,14 @@
 import * as types from '../types/types';
 
 const defaultState = {
-  currentProfile: {
+  userData: {
     id: null,
-    email: null,
-    firstName: null,
-    lastName: null,
-    user: null,
-    created_at: null
+    email: null
   },
+  userContacts: [],
   isAuth: false,
-  userProfiles: [],
   isLoading: false,
-  error: ''
+  error: null
 };
 
 export default function userReducer(state = defaultState, action) {
@@ -21,17 +17,9 @@ export default function userReducer(state = defaultState, action) {
       return {
         ...state, isAuth: action.payload
       }
-    case types.SET_USER_PROFILE_DATA:
+    case types.SET_USER_DATA:
       return {
-        ...state, currentProfile: action.payload
-      }
-    case types.SET_UPDATED_PROFILE_DATA:
-      return {
-        ...state, currentProfile: {
-          ...state.currentProfile,
-          firstName: action.payload.firstName,
-          lastName: action.payload.lastName
-        }
+        ...state, userData: action.payload
       }
     default:
       return state;

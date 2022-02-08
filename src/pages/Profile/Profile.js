@@ -3,47 +3,44 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { format, parseJSON } from 'date-fns';
 import { Spin } from 'antd';
-import { getAllProfilesRequest } from '../../http/api';
-import { setCurrentProfileDataAC } from '../../store/actions/actions';
+import { getProfileRequest } from '../../http/api';
+import { setProfileDataAC } from '../../store/actions/actions';
 import Container from '../../components/Container/Container';
 import ProfileTitle from '../../components/ProfileTitle/ProfileTitle';
 import ProfileActionButtons from '../../components/ProfileActionButtons/ProfileActionButtons';
 import classes from './Profile.module.scss';
 import AvatarIcon from '../../assets/icons/profile.svg';
+import Cookies from 'js-cookie';
 
 function Profile() {
   const [isLoading, setIsLoading] = React.useState(true);
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const currentProfile = useSelector(state => state.userReducer.currentProfile);
-  const profileData = useSelector(state => state.profilePageReducer.profileData);
-  const isCurrent = useSelector(state => state.profilePageReducer.isCurrent);
+  const userData = useSelector(state => state.userReducer.userData);
+  const profileData = useSelector(state => state.profileReducer.profileData);
+  const isCurrent = useSelector(state => state.profileReducer.isCurrent);
 
   React.useEffect(async () => {
     try {
       setIsLoading(true);
-      const usersData = await getAllProfilesRequest();
+      let currentProfile;
       if (id) {
-        let check = false;
-        for (let i of usersData.data) {
-          if (i.id === id) {
-            dispatch(setCurrentProfileDataAC(i, false));
-            check = true;
-          }
-        }
-        if (!check) {
-          throw new Error("Profile not found");
-        }
+        currentProfile = await getProfileRequest(id, Cookies.get('accessToken'), "id");
+        dispatch(setProfileDataAC(currentProfile.data[0], false));
+        setIsLoading(false);
       } else {
-        dispatch(setCurrentProfileDataAC(currentProfile, true));
+        currentProfile = await getProfileRequest(userData.id, Cookies.get('accessToken'), "user");
+        console.log(currentProfile);
+        dispatch(setProfileDataAC(currentProfile.data[0], true));
+        setIsLoading(false);
       }
-      setIsLoading(false);
     } catch (e) {
+      setIsLoading(false);
       navigate("/not-found");
       console.log("PROFILE PAGE ERROR: ", e);
     }
-  }, [id]);
+  }, []);
 
   return (
     isLoading

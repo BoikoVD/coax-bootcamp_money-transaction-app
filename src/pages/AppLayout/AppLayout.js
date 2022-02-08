@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 import { Layout, Menu, Button } from 'antd';
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { setIsAuthAC, setUserProfileDataAC } from '../../store/actions/actions';
+import { setIsAuthAC, setUserDataAC, setUserProfileDataAC } from '../../store/actions/actions';
 import classes from './AppLayout.module.scss';
 import LogoImg from '../../assets/img/Citizens_Financial_Group_logo.svg'
 
@@ -17,13 +17,9 @@ function AppLayout() {
   const logoutHandle = async () => {
     try {
       Cookies.remove('accessToken');
-      dispatch(setUserProfileDataAC({
+      dispatch(setUserDataAC({
         id: null,
-        email: null,
-        firstName: null,
-        lastName: null,
-        user: null,
-        created_at: null
+        email: null
       }));
       dispatch(setIsAuthAC(false));
     } catch (e) {

@@ -57,6 +57,19 @@ export const resetPasswordRequest = async (accessToken, newPassword) => {
   return data;
 };
 
+export const getProfileRequest = async (id, accessToken, type) => {
+  const data = await axios.get(`${API_PROFILE_URL}/profile?${type}=eq.${id}&select=*`, {
+    headers: {
+      'apikey': process.env.React_App_API_KEY,
+      'Authorization': `Bearer ${accessToken}`
+    }
+  }).then((res) => {
+    return res;
+  });
+  return data;
+
+};
+
 export const getAllProfilesRequest = async () => {
   const data = await axios.get(`${API_PROFILE_URL}/profile?select=*`, {
     headers: {
