@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button, Modal, Spin, Form, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { updateProfileDataRequest } from '../../http/api';
+import { updateProfileDataRequest } from '../../services/apiService';
 import { setUpdatedProfileDataAC } from '../../store/actions/actions';
 import EditPersonalDataForm from '../EditPersonalDataForm/EditPersonalDataForm';
 import classes from './ProfileTitle.module.scss';
@@ -20,8 +19,7 @@ function ProfileTitle({ isCurrent, firstName, lastName, profileId }) {
   const editPersonalData = async ({ newFirstName, newLastName }) => {
     setIsLoading(true);
     try {
-      const accessToken = Cookies.get("accessToken");
-      await updateProfileDataRequest(accessToken, newFirstName, newLastName, profileId);
+      await updateProfileDataRequest(newFirstName, newLastName, profileId);
       dispatch(setUpdatedProfileDataAC(newFirstName, newLastName));
       setIsModalVisible(false);
       message.success("Data saved successfully", 10);

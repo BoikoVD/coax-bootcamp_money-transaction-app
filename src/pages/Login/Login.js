@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, Spin, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { getProfileRequest, loginApiRequest } from '../../http/api';
+import { getProfileRequest, loginRequest } from '../../services/apiService';
 import * as actions from '../../store/actions/actions';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Login.module.scss';
@@ -16,18 +16,19 @@ function Login() {
   const loginHandle = async ({ email, password, remember }) => {
     setIsLoading(true);
     try {
-      const user = await loginApiRequest(email, password);
+      const user = await loginRequest(email, password);
 
       const userId = user.data.user.id;
       const userEmail = user.data.user.email;
       const accessToken = user.data.access_token;
       const expiresIn = user.data.expires_in / 60 / 60 / 24;
 
-      const profileData = await getProfileRequest(userId, accessToken, "user");
-
       if (remember) {
         Cookies.set('accessToken', `${accessToken}`, { expires: expiresIn });
       }
+
+      const profileData = await getProfileRequest(userId, "user");
+
       dispatch(actions.setUserDataAC({ id: userId, email: userEmail }));
       dispatch(actions.setProfileDataAC(profileData.data[0], true));
       dispatch(actions.setIsAuthAC(true));

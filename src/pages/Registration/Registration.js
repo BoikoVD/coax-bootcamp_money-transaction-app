@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Spin, Modal, message } from 'antd';
-import { signupRequest, createProfileRequest } from '../../http/api';
+import { createProfileRequest, signUpRequest } from '../../services/apiService';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Registration.module.scss';
 
@@ -13,9 +13,9 @@ function Registration() {
   const registerHandle = async ({ email, firstName, lastName, password }) => {
     setIsLoading(true);
     try {
-      const createdUser = await signupRequest(email, password);
+      const createdUser = await signUpRequest(email, password);
       const userId = createdUser.data.user.id;
-      await createProfileRequest(firstName, lastName, userId, email);
+      await createProfileRequest(userId, email, firstName, lastName);
       setIsModalVisible(true);
     } catch (e) {
       console.log('REGISTRATION ERROR: ', e);

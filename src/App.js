@@ -2,7 +2,7 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
-import { getUserRequest, getProfileRequest } from './http/api';
+import { getProfileRequest, getUserRequest } from './services/apiService';
 import * as actions from './store/actions/actions';
 import AppRouter from './router/AppRouter';
 import './assets/styles/App.less';
@@ -13,13 +13,12 @@ function App() {
   const dispatch = useDispatch();
 
   React.useEffect(async () => {
-    const accessToken = Cookies.get('accessToken');
-    if (accessToken) {
+    if (Cookies.get('accessToken')) {
       try {
-        const user = await getUserRequest(accessToken);
+        const user = await getUserRequest();
         const userId = user.data.id;
         const userEmail = user.data.email;
-        const profileData = await getProfileRequest(userId, accessToken, "user");
+        const profileData = await getProfileRequest(userId, "user");
         dispatch(actions.setUserDataAC({ id: userId, email: userEmail }));
         dispatch(actions.setProfileDataAC(profileData.data[0], true));
         dispatch(actions.setIsAuthAC(true));

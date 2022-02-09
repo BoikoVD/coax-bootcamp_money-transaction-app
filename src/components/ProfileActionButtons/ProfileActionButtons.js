@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
 import { useSelector } from 'react-redux';
 import { Button, Modal, Form, Spin, message } from 'antd';
-import { resetPasswordRequest } from '../../http/api';
+import { resetPasswordRequest } from '../../services/apiService';
 import ResetPasswordForm from '../ResetPasswordForm/ResetPasswordForm';
 import classes from './ProfileActionButtons.module.scss';
 
@@ -34,7 +34,7 @@ function ProfileActionButtons({ isCurrent, id }) {
   const resetPassword = async ({ newPassword }) => {
     setIsLoading(true);
     try {
-      await resetPasswordRequest(Cookies.get("accessToken"), newPassword);
+      await resetPasswordRequest(newPassword);
       setIsModalVisible(false);
       message.success("Data saved successfully", 10);
     } catch (e) {

@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { format, parseJSON } from 'date-fns';
 import { Spin } from 'antd';
-import { getProfileRequest } from '../../http/api';
+import { getProfileRequest } from '../../services/apiService';
 import { setProfileDataAC } from '../../store/actions/actions';
 import Container from '../../components/Container/Container';
 import ProfileTitle from '../../components/ProfileTitle/ProfileTitle';
 import ProfileActionButtons from '../../components/ProfileActionButtons/ProfileActionButtons';
 import classes from './Profile.module.scss';
 import AvatarIcon from '../../assets/icons/profile.svg';
-import Cookies from 'js-cookie';
 
 function Profile() {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -26,12 +25,11 @@ function Profile() {
       setIsLoading(true);
       let currentProfile;
       if (id) {
-        currentProfile = await getProfileRequest(id, Cookies.get('accessToken'), "id");
+        currentProfile = await getProfileRequest(id, "id");
         dispatch(setProfileDataAC(currentProfile.data[0], false));
         setIsLoading(false);
       } else {
-        currentProfile = await getProfileRequest(userData.id, Cookies.get('accessToken'), "user");
-        console.log(currentProfile);
+        currentProfile = await getProfileRequest(userData.id, "user");
         dispatch(setProfileDataAC(currentProfile.data[0], true));
         setIsLoading(false);
       }
