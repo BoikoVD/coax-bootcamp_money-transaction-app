@@ -16,21 +16,19 @@ function AppLayout() {
   }, [location.pathname]);
 
   return (
-    <div className={classes.wrapper}>
-      <Layout>
-        <Sidebar pathname={location.pathname} />
-        <Layout className={classes.contentLayout}>
-          <Header className={classes.header}>
-            {title}
-          </Header>
-          <Content className={classes.content}>
-            <div className={classes.contentBody}>
-              <Outlet />
-            </div>
-          </Content>
-        </Layout>
+    <Layout className={classes.wrapper}>
+      <Sidebar pathname={location.pathname} />
+      <Layout className={classes.contentLayout}>
+        <Header className={classes.header}>
+          {title}
+        </Header>
+        <Content className={classes.content}>
+          <div className={classes.contentBody}>
+            <Outlet />
+          </div>
+        </Content>
       </Layout>
-    </div>
+    </Layout>
   )
 }
 

@@ -55,6 +55,18 @@ export const getProfileRequest = async (id, column) => {
   });
 };
 
+export const getProfilesWithPaginationRequest = async (from, to) => {
+  return await profileApi.get(`/profile?select=*`, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`,
+      'Prefer': `count=exact,head=true`,
+      'Range': `${from}-${to}`
+    }
+  }).then((res) => {
+    return res;
+  });
+};
+
 export const getAllProfilesRequest = async () => {
   return await profileApi.get(`/profile?select=*`, {
     headers: {

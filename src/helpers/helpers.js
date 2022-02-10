@@ -14,3 +14,7 @@ export const pageHeaderConstructor = (pathname) => {
   }
   return title[0].toUpperCase() + title.slice(1);
 };
+
+export const pageCountHelper = (str) => {
+  return Number(str.slice(str.indexOf("/") + 1));
+};
