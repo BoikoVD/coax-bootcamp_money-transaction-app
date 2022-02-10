@@ -5,3 +5,5 @@ export const setUserDataAC = (userData) => ({ type: types.SET_USER_DATA, payload
 
 export const setProfileDataAC = (profileData, isCurrent) => ({ type: types.SET_PROFILE_DATA, payload: { profileData, isCurrent } });
 export const setUpdatedProfileDataAC = (firstName, lastName) => ({ type: types.SET_UPDATED_PROFILE_DATA, payload: { firstName, lastName } });
+
+export const addContactAC = (contactId) => ({ type: types.ADD_CONTACT, payload: contactId });

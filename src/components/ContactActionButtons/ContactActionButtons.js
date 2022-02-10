@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { Button } from 'antd';
+import cn from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Spin } from 'antd';
+import { addContactAC } from '../../store/actions/actions';
+import { addContactRequest } from '../../services/apiService';
 import classes from './ContactActionButtons.module.scss';
 
 function ContactActionButtons({ id }) {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isFriend, setIsFriend] = React.useState(false);
-  const userContacts = useSelector(state => state.userReducer.userContacts);
+  const user = useSelector(state => state.userReducer.userData);
+  const userContacts = useSelector(state => state.contactsReducer.userContacts);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (userContacts.length > 0) {
@@ -17,6 +23,18 @@ function ContactActionButtons({ id }) {
       };
     };
   }, [id, userContacts]);
+
+  const addContactHandler = async () => {
+    setIsLoading(true);
+    try {
+      const response = await addContactRequest(user.id, id);
+      console.log(response);
+      dispatch(addContactAC(response.data[0].contact));
+    } catch (e) {
+      console.log("ADD CONTACT ERROR: ", e.response.data);
+    }
+    setIsLoading(false);
+  };
 
   return (
     <div className={classes.buttonsWrapper}>
@@ -44,9 +62,11 @@ function ContactActionButtons({ id }) {
         <Button
           type="primary"
           size="middle"
-          className={classes.button}
+          onClick={addContactHandler}
+          disabled={isLoading}
+          className={cn(classes.button, classes.addContactBtn)}
         >
-          Add contact
+          {isLoading ? <Spin /> : "Add contact"}
         </Button>}
     </div>
   )

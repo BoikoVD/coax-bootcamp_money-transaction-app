@@ -104,3 +104,17 @@ export const updateProfileDataRequest = async (newFirstName, newLastName, profil
     return res;
   });
 };
+
+export const addContactRequest = async (owner, contact) => {
+  return profileApi.post(`/contact`, {
+    owner,
+    contact
+  }, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`,
+      'Prefer': `return=representation`,
+    }
+  }).then((res) => {
+    return res;
+  });
+};

@@ -18,7 +18,6 @@ function Sidebar({ pathname }) {
       collapsedWidth="0"
       zeroWidthTriggerStyle={{ top: "11px" }}
       className={classes.sider}
-      onBreakpoint={(broken) => { console.log(broken) }}
     >
       <Logo />
       <Menu
