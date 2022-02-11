@@ -7,3 +7,4 @@ export const setProfileDataAC = (profileData, isCurrent) => ({ type: types.SET_P
 export const setUpdatedProfileDataAC = (firstName, lastName) => ({ type: types.SET_UPDATED_PROFILE_DATA, payload: { firstName, lastName } });
 
 export const addContactAC = (contactId) => ({ type: types.ADD_CONTACT, payload: contactId });
+export const setContactsAC = (contacts) => ({ type: types.SET_CONTACTS, payload: contacts });

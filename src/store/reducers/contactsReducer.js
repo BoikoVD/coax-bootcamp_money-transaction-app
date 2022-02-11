@@ -12,6 +12,10 @@ export default function contactsReducer(state = defaultState, action) {
       return {
         ...state, userContacts: [...state.userContacts, action.payload]
       }
+    case types.SET_CONTACTS:
+      return {
+        ...state, userContacts: action.payload
+      }
     default:
       return state;
   }

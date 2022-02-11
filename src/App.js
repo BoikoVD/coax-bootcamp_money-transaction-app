@@ -2,10 +2,11 @@ import React from 'react';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
-import { getProfileRequest, getUserRequest } from './services/apiService';
+import { getProfileRequest, getUserRequest, getOwnContactsRequest } from './services/apiService';
 import * as actions from './store/actions/actions';
 import AppRouter from './router/AppRouter';
 import './assets/styles/App.less';
+import { contactsParser } from './helpers/helpers';
 
 function App() {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -19,8 +20,10 @@ function App() {
         const userId = user.data.id;
         const userEmail = user.data.email;
         const profileData = await getProfileRequest(userId, "user");
+        const contacts = await getOwnContactsRequest(userId);
         dispatch(actions.setUserDataAC({ id: userId, email: userEmail }));
         dispatch(actions.setProfileDataAC(profileData.data[0], true));
+        dispatch(actions.setContactsAC(contactsParser(contacts.data)));
         dispatch(actions.setIsAuthAC(true));
       } catch (e) {
         console.log("CHECK AUTH ERROR: ", e);

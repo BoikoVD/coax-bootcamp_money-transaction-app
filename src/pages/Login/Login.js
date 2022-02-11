@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Form, Input, Button, Checkbox, Spin, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { getProfileRequest, loginRequest } from '../../services/apiService';
+import { contactsParser } from '../../helpers/helpers';
+import { getProfileRequest, loginRequest, getOwnContactsRequest } from '../../services/apiService';
 import * as actions from '../../store/actions/actions';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Login.module.scss';
@@ -28,9 +29,11 @@ function Login() {
       }
 
       const profileData = await getProfileRequest(userId, "user");
+      const contacts = await getOwnContactsRequest(userId);
 
       dispatch(actions.setUserDataAC({ id: userId, email: userEmail }));
       dispatch(actions.setProfileDataAC(profileData.data[0], true));
+      dispatch(actions.setContactsAC(contactsParser(contacts.data)));
       dispatch(actions.setIsAuthAC(true));
     } catch (e) {
       setIsLoading(false);

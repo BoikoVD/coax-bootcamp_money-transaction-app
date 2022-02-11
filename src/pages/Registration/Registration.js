@@ -14,11 +14,13 @@ function Registration() {
     setIsLoading(true);
     try {
       const createdUser = await signUpRequest(email, password);
+      console.log(createdUser);
       const userId = createdUser.data.user.id;
-      await createProfileRequest(userId, email, firstName, lastName);
+      const accessToken = createdUser.data.access_token;
+      await createProfileRequest(userId, email, firstName, lastName, accessToken);
       setIsModalVisible(true);
     } catch (e) {
-      console.log('REGISTRATION ERROR: ', e);
+      console.log('REGISTRATION ERROR: ', e.response.data);
       message.error(`${e.message}. Please try again later`, 10);
     }
     setIsLoading(false);

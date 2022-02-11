@@ -67,6 +67,17 @@ export const getProfilesWithPaginationRequest = async (from, to) => {
   });
 };
 
+export const getContactProfilesRequest = async (arrayOfId) => {
+  const strOfId = arrayOfId.join(",");
+  return await profileApi.get(`/profile?user=in.(${strOfId})&select=*`, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+    }
+  }).then((res) => {
+    return res;
+  });
+};
+
 export const getAllProfilesRequest = async () => {
   return await profileApi.get(`/profile?select=*`, {
     headers: {
@@ -77,7 +88,7 @@ export const getAllProfilesRequest = async () => {
   });
 };
 
-export const createProfileRequest = async (userId, email, firstName, lastName) => {
+export const createProfileRequest = async (userId, email, firstName, lastName, accessToken) => {
   return await profileApi.post(`/profile`, {
     firstName,
     lastName,
@@ -85,7 +96,7 @@ export const createProfileRequest = async (userId, email, firstName, lastName) =
     email
   }, {
     headers: {
-      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+      'Authorization': `Bearer ${accessToken}`
     }
   }).then((res) => {
     return res;
@@ -113,6 +124,16 @@ export const addContactRequest = async (owner, contact) => {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`,
       'Prefer': `return=representation`,
+    }
+  }).then((res) => {
+    return res;
+  });
+};
+
+export const getOwnContactsRequest = async (ownerId) => {
+  return profileApi.get(`/contact?owner=eq.${ownerId}&select=contact`, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
   }).then((res) => {
     return res;

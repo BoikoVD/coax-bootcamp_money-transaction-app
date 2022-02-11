@@ -18,3 +18,11 @@ export const pageHeaderConstructor = (pathname) => {
 export const pageCountHelper = (str) => {
   return Number(str.slice(str.indexOf("/") + 1));
 };
+
+export const contactsParser = (contactsArray) => {
+  let newcontactsArray = [];
+  for (let i of contactsArray) {
+    newcontactsArray.push(i.contact);
+  }
+  return newcontactsArray;
+};
