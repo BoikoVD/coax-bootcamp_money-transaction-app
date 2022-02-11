@@ -1,37 +1,37 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Form, Input, Button, Spin, Modal, message } from 'antd';
-import { createProfileRequest, signUpRequest } from '../../services/apiService';
+import * as actions from '../../store/actions/actions';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Registration.module.scss';
 
 function Registration() {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const userData = useSelector(store => store.userReducer);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const registerHandle = async ({ email, firstName, lastName, password }) => {
-    setIsLoading(true);
-    try {
-      const createdUser = await signUpRequest(email, password);
-      console.log(createdUser);
-      const userId = createdUser.data.user.id;
-      const accessToken = createdUser.data.access_token;
-      await createProfileRequest(userId, email, firstName, lastName, accessToken);
-      setIsModalVisible(true);
-    } catch (e) {
-      console.log('REGISTRATION ERROR: ', e.response.data);
-      message.error(`${e.message}. Please try again later`, 10);
-    }
-    setIsLoading(false);
+  const registerHandle = ({ email, firstName, lastName, password }) => {
+    dispatch(actions.registrationAC(email, firstName, lastName, password));
   };
 
   const goToLoginHandle = () => {
     navigate("/login");
+    dispatch(actions.setIsModalVisibleUserAC(false));
   }
   const closeModalHandle = () => {
-    setIsModalVisible(false);
+    dispatch(actions.setIsModalVisibleUserAC(false));
   };
+
+  React.useEffect(() => {
+    if (userData.error) {
+      message.error(
+        `${userData.error.response.data.msg}`,
+        5
+      );
+      dispatch(actions.setErrorUserAC(null));
+    }
+  }, [userData.error]);
 
   return (
     <div className={classes.wrapper}>
@@ -84,8 +84,8 @@ function Registration() {
           <Form.Item
             wrapperCol={{ sm: { span: 14, offset: 10 }, xs: { offset: 0 } }}
           >
-            <Button type="primary" htmlType="submit" block disabled={isLoading}>
-              {isLoading ? <Spin /> : "Register"}
+            <Button type="primary" htmlType="submit" block disabled={userData.isLoading}>
+              {userData.isLoading ? <Spin /> : "Register"}
             </Button>
             <div className={classes.linkWrapper}>
               <Link to="/login" className={classes.link}>Back</Link>
@@ -95,7 +95,7 @@ function Registration() {
       </div>
       <Modal
         title="Registration complete"
-        visible={isModalVisible}
+        visible={userData.isModalVisible}
         centered
         style={{ maxWidth: "300px" }}
         bodyStyle={{ display: "flex", flexDirection: "column", alignItems: "center" }}

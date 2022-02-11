@@ -1,8 +1,17 @@
 export const SET_IS_AUTH = "SET_IS_AUTH";
 export const SET_USER_DATA = "SET_USER_DATA";
+export const SET_IS_LOADING_USER = "SET_IS_LOADING_USER";
+export const SET_ERROR_USER = "SET_ERROR_USER";
+export const SET_IS_MODAL_VISIBLE_USER = "SET_IS_MODAL_VISIBLE_USER";
 
 export const SET_PROFILE_DATA = "SET_PROFILE_DATA";
 export const SET_UPDATED_PROFILE_DATA = "SET_UPDATED_PROFILE_DATA";
 
 export const ADD_CONTACT = "ADD_CONTACT";
 export const SET_CONTACTS = "SET_CONTACTS";
+
+
+export const LOGIN = "LOGIN";
+export const LOGOUT = "LOGOUT";
+export const CHECK_AUTH = "CHECK_AUTH";
+export const REGISTRATION = "REGISTRATION";

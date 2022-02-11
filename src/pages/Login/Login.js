@@ -1,49 +1,29 @@
 import React from 'react';
-import Cookies from 'js-cookie';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button, Checkbox, Spin, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import { contactsParser } from '../../helpers/helpers';
-import { getProfileRequest, loginRequest, getOwnContactsRequest } from '../../services/apiService';
 import * as actions from '../../store/actions/actions';
 import * as validationRules from '../../helpers/antdValidatorRules';
 import classes from './Login.module.scss';
 
 function Login() {
-  const [isLoading, setIsLoading] = React.useState(false);
+  const userData = useSelector(store => store.userReducer);
   const dispatch = useDispatch();
 
-  const loginHandle = async ({ email, password, remember }) => {
-    setIsLoading(true);
-    try {
-      const user = await loginRequest(email, password);
-
-      const userId = user.data.user.id;
-      const userEmail = user.data.user.email;
-      const accessToken = user.data.access_token;
-      const expiresIn = user.data.expires_in / 60 / 60 / 24;
-
-      if (remember) {
-        Cookies.set('accessToken', `${accessToken}`, { expires: expiresIn });
-      }
-
-      const profileData = await getProfileRequest(userId, "user");
-      const contacts = await getOwnContactsRequest(userId);
-
-      dispatch(actions.setUserDataAC({ id: userId, email: userEmail }));
-      dispatch(actions.setProfileDataAC(profileData.data[0], true));
-      dispatch(actions.setContactsAC(contactsParser(contacts.data)));
-      dispatch(actions.setIsAuthAC(true));
-    } catch (e) {
-      setIsLoading(false);
-      console.log('LOGIN ERROR: ', e);
-      message.error(
-        "An error has occurred. Please check that you have entered the data correctly and try again",
-        10
-      );
-    }
+  const loginHandle = ({ email, password, remember }) => {
+    dispatch(actions.loginAC(email, password, remember));
   };
+
+  React.useEffect(() => {
+    if (userData.error) {
+      message.error(
+        `${userData.error.response.data.error_description}`,
+        5
+      );
+      dispatch(actions.setErrorUserAC(null));
+    }
+  }, [userData.error]);
 
   return (
     <div className={classes.wrapper}>
@@ -77,10 +57,10 @@ function Login() {
           <Button
             type="primary"
             htmlType="submit"
-            disabled={isLoading}
+            disabled={userData.isLoading}
             block
           >
-            {isLoading ? <Spin /> : "Log in"}
+            {userData.isLoading ? <Spin /> : "Log in"}
           </Button>
           Or <Link to="/registration" className={classes.link}>register now!</Link>
         </Form.Item>
