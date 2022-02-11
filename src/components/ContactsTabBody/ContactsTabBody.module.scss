@@ -7,7 +7,47 @@
 	height: 100%;
 }
 
-.body {
+.bodyWrapper {
 	overflow: auto;
 	flex: 1 1 auto;
+
+	margin-right: -16px;
+
+	&::-webkit-scrollbar {
+		width: 4px;
+
+		background-color: #FFF;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 15px;
+		background-color: #C3E2FF;
+	}
+
+	&::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background: transparent;
+	}
+}
+
+.body {
+	height: 100%;
+	padding-right: 16px;
+}
+
+
+.content {
+	display: flex;
+	flex-direction: column;
+
+	height: 100%;
+}
+
+.paginationWrapper {
+	display: flex;
+	justify-content: center;
+
+	width: 100%;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }

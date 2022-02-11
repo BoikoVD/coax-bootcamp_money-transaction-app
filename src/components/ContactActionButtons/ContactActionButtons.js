@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Spin } from 'antd';
-import { addContactAC } from '../../store/actions/actions';
-import { addContactRequest } from '../../services/apiService';
+import { addContactAC, setContactsAC } from '../../store/actions/actions';
+import { addContactRequest, deleteContactRequest } from '../../services/apiService';
 import classes from './ContactActionButtons.module.scss';
 
 function ContactActionButtons({ id }) {
@@ -15,23 +15,39 @@ function ContactActionButtons({ id }) {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    let check = false;
     if (userContacts.length > 0) {
       for (let i of userContacts) {
         if (i === id) {
           setIsFriend(true);
+          check = true;
         }
       };
     };
+    if (!check) {
+      setIsFriend(false);
+    }
   }, [id, userContacts]);
 
   const addContactHandler = async () => {
     setIsLoading(true);
     try {
       const response = await addContactRequest(user.id, id);
-      console.log(response);
       dispatch(addContactAC(response.data[0].contact));
     } catch (e) {
       console.log("ADD CONTACT ERROR: ", e.response.data);
+    }
+    setIsLoading(false);
+  };
+
+  const deleteContactHandler = async () => {
+    setIsLoading(true);
+    try {
+      await deleteContactRequest(user.id, id);
+      const newContacts = userContacts.filter((i) => i !== id);
+      dispatch(setContactsAC(newContacts));
+    } catch (e) {
+      console.log("DELETE CONTACT ERROR: ", e.response.data);
     }
     setIsLoading(false);
   };
@@ -44,18 +60,21 @@ function ContactActionButtons({ id }) {
           <Button
             type="primary"
             size="middle"
+            disabled={isLoading}
             className={classes.button}
           >
             Send money
           </Button>
           <Button
             type="primary"
+            size="small"
             ghost
             danger
-            size="small"
-            className={classes.button}
+            onClick={deleteContactHandler}
+            disabled={isLoading}
+            className={cn(classes.button, classes.deleteBtn)}
           >
-            Delete contact
+            {isLoading ? <Spin size="small" className={classes.spin} /> : "Delete contact"}
           </Button>
         </>
         :
@@ -64,7 +83,7 @@ function ContactActionButtons({ id }) {
           size="middle"
           onClick={addContactHandler}
           disabled={isLoading}
-          className={cn(classes.button, classes.addContactBtn)}
+          className={cn(classes.button, classes.addBtn)}
         >
           {isLoading ? <Spin /> : "Add contact"}
         </Button>}

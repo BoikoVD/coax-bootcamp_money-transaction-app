@@ -130,6 +130,16 @@ export const addContactRequest = async (owner, contact) => {
   });
 };
 
+export const deleteContactRequest = async (owner, contact) => {
+  return profileApi.delete(`/contact?owner=eq.${owner}&contact=eq.${contact}`, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+    }
+  }).then((res) => {
+    return res;
+  });
+};
+
 export const getOwnContactsRequest = async (ownerId) => {
   return profileApi.get(`/contact?owner=eq.${ownerId}&select=contact`, {
     headers: {

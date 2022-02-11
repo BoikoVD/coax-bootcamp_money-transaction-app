@@ -11,6 +11,7 @@ const { TabPane } = Tabs;
 
 function Contacts() {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [pagination, setPagination] = React.useState(1);
   const [profiles, setProfiles] = React.useState([]);
   const [pageCount, setPageCount] = React.useState(1);
   const userContacts = useSelector(state => state.contactsReducer.userContacts);
@@ -48,6 +49,7 @@ function Contacts() {
 
   const tabHandler = async (key) => {
     setPageCount(1);
+    setPagination(1);
     if (key === "myContacts") {
       getContacts();
     };
@@ -63,18 +65,25 @@ function Contacts() {
       const to = (page * 10) - 1;
       const response = await getProfilesWithPaginationRequest(from, to);
       setProfiles(response.data);
-      setIsLoading(false);
+      setPagination(page);
     } catch (e) {
       console.log("TAB PAGINATION ALLUSERS ERROR", e);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   const paginationMyContactsHandler = async (page) => {
-    const to = page * 10;
-    const from = to - 10;
-    const contacts = await getContactProfilesRequest(userContacts.slice(from, to));
-    setProfiles(contacts.data);
+    setIsLoading(true);
+    try {
+      const to = page * 10;
+      const from = to - 10;
+      const contacts = await getContactProfilesRequest(userContacts.slice(from, to));
+      setProfiles(contacts.data);
+      setPagination(page);
+    } catch (e) {
+      console.log("TAB PAGINATION MYCONTACTS ERROR", e);
+    }
+    setIsLoading(false);
   };
 
   React.useEffect(async () => {
@@ -85,28 +94,22 @@ function Contacts() {
     <div className="card-container">
       <Tabs type="card" onChange={tabHandler}>
         <TabPane tab="My contacts" key="myContacts" >
-          <div className={classes.content}>
-            <ContactsTabBody isLoading={isLoading} profiles={profiles} />
-            <div className={classes.paginationWrapper}>
-              <Pagination
-                total={pageCount}
-                onChange={paginationMyContactsHandler}
-                showSizeChanger={false}
-              />
-            </div>
-          </div>
+          <ContactsTabBody
+            isLoading={isLoading}
+            profiles={profiles}
+            cardCount={pageCount}
+            paginationHandler={paginationMyContactsHandler}
+            pagination={pagination}
+          />
         </TabPane>
         <TabPane tab="All users" key="allUsers" >
-          <div className={classes.content}>
-            <ContactsTabBody isLoading={isLoading} profiles={profiles} />
-            <div className={classes.paginationWrapper}>
-              <Pagination
-                total={pageCount}
-                onChange={paginationAllUsersHandler}
-                showSizeChanger={false}
-              />
-            </div>
-          </div>
+          <ContactsTabBody
+            isLoading={isLoading}
+            profiles={profiles}
+            cardCount={pageCount}
+            paginationHandler={paginationAllUsersHandler}
+            pagination={pagination}
+          />
         </TabPane>
       </Tabs>
     </div >
