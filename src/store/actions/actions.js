@@ -10,12 +10,14 @@ export const setProfileDataAC = (profileData, isCurrent) => ({ type: types.SET_P
 export const setUpdatedProfileDataAC = (firstName, lastName) => ({ type: types.SET_UPDATED_PROFILE_DATA, payload: { firstName, lastName } });
 export const setIsLoadingProfileAC = (isLoading) => ({ type: types.SET_IS_LOADING_PROFILE, payload: isLoading });
 export const setErrorProfileAC = (error) => ({ type: types.SET_ERROR_PROFILE, payload: error });
-export const setIsModalVisibleProfileAC = (isModalVisible, modalType) => ({ type: types.SET_IS_MODAL_VISIBLE_PROFILE, payload: { isModalVisible, modalType } });
-export const setIsModalLoadingProfileAC = (isModalLoading) => ({ type: types.SET_IS_MODAL_LOADING_PROFILE, payload: isModalLoading });
-export const setModalMessageProfileAC = (modalMessage) => ({ type: types.SET_MODAL_MESSAGE_PROFILE, payload: modalMessage });
 
-export const addContactAC = (contactId) => ({ type: types.ADD_CONTACT, payload: contactId });
+export const setOneContactAC = (contactId) => ({ type: types.SET_ONE_CONTACT, payload: contactId });
 export const setContactsAC = (contacts) => ({ type: types.SET_CONTACTS, payload: contacts });
+export const isLoadingContactsAC = () => ({ type: types.IS_LOADING_CONTACTS, payload: null });
+export const setContactProfilesAC = (profiles, itemsCount, activePagination) => ({ type: types.SET_CONTACT_PROFILES, payload: { profiles, itemsCount, activePagination } });
+export const setPaginationAC = (activePagination) => ({ type: types.SET_PAGINATION, payload: { activePagination } });
+export const setItemsCountOfPaginationAC = (itemsCount) => ({ type: types.SET_ITEMS_COUNT_OF_PAGINATION, payload: { itemsCount } });
+export const isLoadingOneProfileAC = (id, isLoading) => ({ type: types.IS_LOADING_ONE_PROFILE, payload: { id, isLoading } });
 
 
 export const loginAC = (email, password, remember) => ({ type: types.LOGIN, payload: { email, password, remember } });
@@ -26,6 +28,12 @@ export const registrationAC = (email, firstName, lastName, password) => ({ type:
 export const getProfileAC = (id) => ({ type: types.GET_PROFILE, payload: { id } });
 export const updateProfileDataAC = (newFirstName, newLastName, profileId) => ({ type: types.UPDATE_PROFILE_DATA, payload: { newFirstName, newLastName, profileId } });
 export const resetPasswordAC = (newPassword) => ({ type: types.RESET_PASSWORD, payload: { newPassword } });
+
+export const getContactsAC = (from, to, page) => ({ type: types.GET_CONTACTS, payload: { from, to, page } });
+export const getAllProfilesAC = (from, to, page) => ({ type: types.GET_ALL_PROFILES, payload: { from, to, page } });
+export const addContactAC = (id) => ({ type: types.ADD_CONTACT, payload: { id } });
+export const deleteContactAC = (id) => ({ type: types.DELETE_CONTACT, payload: { id } });
+
 
 
 

@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { Spin, Pagination } from 'antd';
 import ContactCard from '../../components/ContactCard/ContactCard';
 import classes from './ContactsTabBody.module.scss';
 
-function ContactsTabBody({ isLoading, profiles, cardCount, paginationHandler, pagination }) {
+function ContactsTabBody({ paginationHandler }) {
+  const contactsData = useSelector(state => state.contactsReducer);
 
   const buildProfileCards = (arrayOfProfiles) => {
     if (arrayOfProfiles.length === 0) {
@@ -24,21 +26,21 @@ function ContactsTabBody({ isLoading, profiles, cardCount, paginationHandler, pa
     <div className={classes.content}>
       <div className={classes.bodyWrapper}>
         {
-          isLoading
+          contactsData.isLoading
             ?
             <div className={classes.spinWrapper}>
               < Spin size="large" />
             </div >
             :
             <div className={classes.body}>
-              {buildProfileCards(profiles)}
+              {buildProfileCards(contactsData.profiles)}
             </div>
         }
       </div>
       <div className={classes.paginationWrapper}>
         <Pagination
-          current={pagination}
-          total={cardCount}
+          current={contactsData.activePagination}
+          total={contactsData.itemsCount}
           onChange={paginationHandler}
           hideOnSinglePage={true}
           showSizeChanger={false}
@@ -49,18 +51,7 @@ function ContactsTabBody({ isLoading, profiles, cardCount, paginationHandler, pa
 }
 
 ContactsTabBody.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  profiles: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    user: PropTypes.string,
-    created_at: PropTypes.string
-  })).isRequired,
-  cardCount: PropTypes.number.isRequired,
-  paginationHandler: PropTypes.func.isRequired,
-  pagination: PropTypes.number.isRequired,
+  paginationHandler: PropTypes.func.isRequired
 }
 
 export default ContactsTabBody;

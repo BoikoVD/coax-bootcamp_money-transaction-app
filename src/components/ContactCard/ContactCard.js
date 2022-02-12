@@ -27,7 +27,7 @@ function ContactCard({ profile }) {
         </div>
       </Col>
       <Col xs={{ span: 24 }} sm={{ span: 6 }} md={{ span: 6 }} lg={{ span: 6 }}>
-        <ContactActionButtons id={profile.user} />
+        <ContactActionButtons id={profile.user} isLoading={profile.isLoading} />
       </Col>
     </Row >
   )
@@ -40,7 +40,8 @@ ContactCard.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     user: PropTypes.string,
-    created_at: PropTypes.string
+    created_at: PropTypes.string,
+    isLoading: PropTypes.bool
   }).isRequired
 }
 

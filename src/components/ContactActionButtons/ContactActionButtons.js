@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Spin } from 'antd';
-import { addContactAC, setContactsAC } from '../../store/actions/actions';
-import { addContactRequest, deleteContactRequest } from '../../services/apiService';
+import * as actions from '../../store/actions/actions';
 import classes from './ContactActionButtons.module.scss';
 
-function ContactActionButtons({ id }) {
-  const [isLoading, setIsLoading] = React.useState(false);
+function ContactActionButtons({ id, isLoading }) {
   const [isFriend, setIsFriend] = React.useState(false);
   const user = useSelector(state => state.userReducer.userData);
   const userContacts = useSelector(state => state.contactsReducer.userContacts);
@@ -29,27 +27,12 @@ function ContactActionButtons({ id }) {
     }
   }, [id, userContacts]);
 
-  const addContactHandler = async () => {
-    setIsLoading(true);
-    try {
-      const response = await addContactRequest(user.id, id);
-      dispatch(addContactAC(response.data[0].contact));
-    } catch (e) {
-      console.log("ADD CONTACT ERROR: ", e.response.data);
-    }
-    setIsLoading(false);
+  const addContactHandler = () => {
+    dispatch(actions.addContactAC(id));
   };
 
-  const deleteContactHandler = async () => {
-    setIsLoading(true);
-    try {
-      await deleteContactRequest(user.id, id);
-      const newContacts = userContacts.filter((i) => i !== id);
-      dispatch(setContactsAC(newContacts));
-    } catch (e) {
-      console.log("DELETE CONTACT ERROR: ", e.response.data);
-    }
-    setIsLoading(false);
+  const deleteContactHandler = () => {
+    dispatch(actions.deleteContactAC(id));
   };
 
   return (
@@ -92,7 +75,8 @@ function ContactActionButtons({ id }) {
 };
 
 ContactActionButtons.propTypes = {
-  id: PropTypes.string
+  id: PropTypes.string,
+  isLoading: PropTypes.bool
 };
 
 export default ContactActionButtons;
