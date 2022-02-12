@@ -27,7 +27,7 @@ function ContactCard({ profile }) {
         </div>
       </Col>
       <Col xs={{ span: 24 }} sm={{ span: 6 }} md={{ span: 6 }} lg={{ span: 6 }}>
-        <ContactActionButtons id={profile.user} isLoading={profile.isLoading} />
+        <ContactActionButtons profile={profile} />
       </Col>
     </Row >
   )

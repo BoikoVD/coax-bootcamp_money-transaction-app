@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Spin } from 'antd';
 import * as actions from '../../store/actions/actions';
 import classes from './ContactActionButtons.module.scss';
+import SendMoneyButton from '../SendMoneyButton/SendMoneyButton';
 
-function ContactActionButtons({ id, isLoading }) {
+function ContactActionButtons({ profile }) {
   const [isFriend, setIsFriend] = React.useState(false);
-  const user = useSelector(state => state.userReducer.userData);
   const userContacts = useSelector(state => state.contactsReducer.userContacts);
   const dispatch = useDispatch();
 
@@ -16,7 +16,7 @@ function ContactActionButtons({ id, isLoading }) {
     let check = false;
     if (userContacts.length > 0) {
       for (let i of userContacts) {
-        if (i === id) {
+        if (i === profile.user) {
           setIsFriend(true);
           check = true;
         }
@@ -25,14 +25,14 @@ function ContactActionButtons({ id, isLoading }) {
     if (!check) {
       setIsFriend(false);
     }
-  }, [id, userContacts]);
+  }, [profile.user, userContacts]);
 
   const addContactHandler = () => {
-    dispatch(actions.addContactAC(id));
+    dispatch(actions.addContactAC(profile.user));
   };
 
   const deleteContactHandler = () => {
-    dispatch(actions.deleteContactAC(id));
+    dispatch(actions.deleteContactAC(profile.user));
   };
 
   return (
@@ -40,24 +40,17 @@ function ContactActionButtons({ id, isLoading }) {
       {isFriend
         ?
         <>
-          <Button
-            type="primary"
-            size="middle"
-            disabled={isLoading}
-            className={classes.button}
-          >
-            Send money
-          </Button>
+          <SendMoneyButton profile={profile} />
           <Button
             type="primary"
             size="small"
             ghost
             danger
             onClick={deleteContactHandler}
-            disabled={isLoading}
+            disabled={profile.isLoading}
             className={cn(classes.button, classes.deleteBtn)}
           >
-            {isLoading ? <Spin size="small" className={classes.spin} /> : "Delete contact"}
+            {profile.isLoading ? <Spin size="small" className={classes.spin} /> : "Delete contact"}
           </Button>
         </>
         :
@@ -65,18 +58,24 @@ function ContactActionButtons({ id, isLoading }) {
           type="primary"
           size="middle"
           onClick={addContactHandler}
-          disabled={isLoading}
+          disabled={profile.isLoading}
           className={cn(classes.button, classes.addBtn)}
         >
-          {isLoading ? <Spin /> : "Add contact"}
+          {profile.isLoading ? <Spin /> : "Add contact"}
         </Button>}
     </div>
   )
 };
 
 ContactActionButtons.propTypes = {
-  id: PropTypes.string,
-  isLoading: PropTypes.bool
+  profile: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    user: PropTypes.string,
+    created_at: PropTypes.string,
+    isLoading: PropTypes.bool
+  })
 };
 
 export default ContactActionButtons;

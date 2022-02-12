@@ -81,7 +81,7 @@ function Profile() {
               ?
               <ResetPasswordButton />
               :
-              <ContactActionButtons id={id} />}
+              <ContactActionButtons profile={profile} />}
           </div>
         </Container>
       </div>
