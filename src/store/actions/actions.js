@@ -19,6 +19,8 @@ export const setPaginationAC = (activePagination) => ({ type: types.SET_PAGINATI
 export const setItemsCountOfPaginationAC = (itemsCount) => ({ type: types.SET_ITEMS_COUNT_OF_PAGINATION, payload: { itemsCount } });
 export const isLoadingOneProfileAC = (id, isLoading) => ({ type: types.IS_LOADING_ONE_PROFILE, payload: { id, isLoading } });
 
+export const isLoadingTransactionsAC = () => ({ type: types.IS_LOADING_TRANSACTIONS, payload: null });
+
 
 export const loginAC = (email, password, remember) => ({ type: types.LOGIN, payload: { email, password, remember } });
 export const logoutAC = () => ({ type: types.LOGOUT, payload: null });
@@ -34,6 +36,7 @@ export const getAllProfilesAC = (from, to, page) => ({ type: types.GET_ALL_PROFI
 export const addContactAC = (id) => ({ type: types.ADD_CONTACT, payload: { id } });
 export const deleteContactAC = (id) => ({ type: types.DELETE_CONTACT, payload: { id } });
 
+export const createTransactionAC = () => ({ type: types.CREATE_TRANSACTION, payload: {} });
 
 
 

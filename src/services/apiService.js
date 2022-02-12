@@ -145,3 +145,27 @@ export const getOwnContactsRequest = async (ownerId) => {
     return res;
   });
 };
+
+export const createTransactionRequest = async (from, to, amount) => {
+  return profileApi.get(`/transaction`, {
+    from,
+    to,
+    amount
+  }, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+    }
+  }).then((res) => {
+    return res;
+  });
+};
+
+export const getTransactionsRequest = async (id, column) => {
+  return profileApi.get(`/transaction?${column}=eq.${id}&select=*`, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+    }
+  }).then((res) => {
+    return res;
+  });
+};
