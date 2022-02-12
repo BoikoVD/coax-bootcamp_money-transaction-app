@@ -41,12 +41,8 @@ export const resetPasswordRequest = async (newPassword) => {
   });
 };
 
-export const getProfileRequest = async (id, column) => {
-  return await profileApi.get(`/profile?${column}=eq.${id}&select=*`, {
-    headers: {
-      'Authorization': `Bearer ${Cookies.get("accessToken")}`
-    }
-  }, {
+export const getProfileRequest = async (id) => {
+  return await profileApi.get(`/profile?user=eq.${id}&select=*`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }

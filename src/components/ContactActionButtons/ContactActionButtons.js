@@ -92,7 +92,7 @@ function ContactActionButtons({ id }) {
 };
 
 ContactActionButtons.propTypes = {
-  id: PropTypes.string.isRequired
+  id: PropTypes.string
 };
 
 export default ContactActionButtons;

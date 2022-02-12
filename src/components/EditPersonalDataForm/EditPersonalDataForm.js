@@ -13,7 +13,7 @@ function EditPersonalDataForm({ form, firstName, lastName }) {
     >
       <Form.Item
         name="newFirstName"
-        label="New first name"
+        label="First name"
         initialValue={firstName}
         rules={validationRules.firstNameRules}
       >
@@ -21,7 +21,7 @@ function EditPersonalDataForm({ form, firstName, lastName }) {
       </Form.Item>
       <Form.Item
         name="newLastName"
-        label="New last name"
+        label="Last name"
         initialValue={lastName}
         rules={validationRules.lastNameRules}
       >

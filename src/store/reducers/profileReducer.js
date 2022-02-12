@@ -16,6 +16,10 @@ const defaultState = {
 
 export default function profileReducer(state = defaultState, action) {
   switch (action.type) {
+    case types.SET_IS_LOADING_PROFILE:
+      return {
+        ...state, isLoading: action.payload
+      }
     case types.SET_PROFILE_DATA:
       return {
         ...state, profileData: action.payload.profileData, isCurrent: action.payload.isCurrent
@@ -27,6 +31,10 @@ export default function profileReducer(state = defaultState, action) {
           firstName: action.payload.firstName,
           lastName: action.payload.lastName
         }
+      }
+    case types.SET_ERROR_PROFILE:
+      return {
+        ...state, error: action.payload
       }
     default:
       return state;

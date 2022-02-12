@@ -11,7 +11,7 @@ function ProfileActionButtons({ isCurrent, id }) {
   const [isFriend, setIsFriend] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const userContacts = useSelector(state => state.userReducer.userContacts);
+  const userContacts = useSelector(state => state.contactsReducer.userContacts);
   const [form] = Form.useForm();
 
   React.useEffect(() => {

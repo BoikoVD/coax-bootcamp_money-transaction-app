@@ -1,42 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { Button, Modal, Spin, Form, message } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Modal, Spin, Form } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { updateProfileDataRequest } from '../../services/apiService';
-import { setUpdatedProfileDataAC } from '../../store/actions/actions';
+import { EDIT_PROFILE_DATA } from '../../store/types/modalTypes';
+import * as actions from '../../store/actions/actions';
 import EditPersonalDataForm from '../EditPersonalDataForm/EditPersonalDataForm';
 import classes from './ProfileTitle.module.scss';
 
 function ProfileTitle({ isCurrent, firstName, lastName, profileId }) {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isModalVisible, setIsModalVisible] = React.useState(false);
+  const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [form] = Form.useForm();
 
-  const editPersonalData = async ({ newFirstName, newLastName }) => {
-    setIsLoading(true);
-    try {
-      await updateProfileDataRequest(newFirstName, newLastName, profileId);
-      dispatch(setUpdatedProfileDataAC(newFirstName, newLastName));
-      setIsModalVisible(false);
-      message.success("Data saved successfully", 10);
-      setIsLoading(false);
-    } catch (e) {
-      message.error("Something is wrong. Please try again later!", 10)
-      console.log("EDIT PERSONAL DATA ERROR: ", e);
-      setIsLoading(false);
-    }
+  const editPersonalData = ({ newFirstName, newLastName }) => {
+    dispatch(actions.updateProfileDataAC(newFirstName, newLastName, profileId));
   };
 
   const editPersonalDataHandle = () => {
-    setIsModalVisible(true)
+    dispatch(actions.openModalAC(EDIT_PROFILE_DATA));
   };
 
   const closeModalHandle = () => {
-    setIsModalVisible(false);
+    dispatch(actions.closeModalAC());
   };
 
   return (
@@ -51,20 +37,15 @@ function ProfileTitle({ isCurrent, firstName, lastName, profileId }) {
             className={classes.editBtn}
             onClick={editPersonalDataHandle}
           />
-          <Button
-            type="primary"
-            className={classes.editBtn}
-            onClick={() => { navigate('/profile/8aae2c22-06fa-46fa-86c6-aa9ab26c997f') }}
-          >Next</Button>
           <Modal
-            visible={isModalVisible}
+            visible={modal.isModalVisible && modal.modalType === EDIT_PROFILE_DATA}
             title="Edit personal data"
             centered
             style={{ maxWidth: "300px" }}
             cancelText="Cancel"
             onCancel={closeModalHandle}
-            okButtonProps={{ disabled: isLoading, style: { width: "70px" } }}
-            okText={isLoading ? <Spin /> : "Edit"}
+            okButtonProps={{ disabled: modal.isModalLoading, style: { width: "70px" } }}
+            okText={modal.isModalLoading ? <Spin /> : "Edit"}
             onOk={() => {
               form
                 .validateFields()
@@ -87,9 +68,9 @@ function ProfileTitle({ isCurrent, firstName, lastName, profileId }) {
 
 ProfileTitle.propTypes = {
   isCurrent: PropTypes.bool.isRequired,
-  firstName: PropTypes.string,
-  lastName: PropTypes.string,
-  profileId: PropTypes.string,
+  firstName: PropTypes.string.isRequired,
+  lastName: PropTypes.string.isRequired,
+  profileId: PropTypes.string.isRequired,
 }
 
 export default ProfileTitle;
