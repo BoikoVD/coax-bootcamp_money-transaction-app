@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Tabs } from 'antd';
+import { Tabs, message } from 'antd';
 import * as actions from '../../store/actions/actions';
 import ContactsTabBody from '../../components/ContactsTabBody/ContactsTabBody';
 import './Contacts.css';
@@ -8,6 +8,7 @@ import './Contacts.css';
 const { TabPane } = Tabs;
 
 function Contacts() {
+  const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
 
   const tabHandler = (key) => {
@@ -37,6 +38,19 @@ function Contacts() {
   React.useEffect(() => {
     dispatch(actions.getContactsAC(0, 10));
   }, []);
+
+  React.useEffect(() => {
+    if (modal.modalMessage) {
+      if (modal.modalMessageType === "error") {
+        message.error(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
+      if (modal.modalMessageType === "success") {
+        message.success(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
+    }
+  }, [modal.modalMessage]);
 
   return (
     <div className="card-container">

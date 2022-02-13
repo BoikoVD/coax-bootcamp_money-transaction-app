@@ -147,13 +147,14 @@ export const getOwnContactsRequest = async (ownerId) => {
 };
 
 export const createTransactionRequest = async (from, to, amount) => {
-  return profileApi.get(`/transaction`, {
+  return profileApi.post(`/transaction`, {
     from,
     to,
     amount
   }, {
     headers: {
-      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`,
+      'Prefer': `return=representation`
     }
   }).then((res) => {
     return res;

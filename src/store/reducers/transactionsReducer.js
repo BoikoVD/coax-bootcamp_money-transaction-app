@@ -17,6 +17,14 @@ export default function transactionsReducer(state = defaultState, action) {
       return {
         ...state, balance: action.payload.newBalance
       }
+    case types.SET_TRANSACTION_LIST:
+      return {
+        ...state, transactions: action.payload.list, balance: action.payload.newBalance
+      }
+    case types.SET_ERROR_TRANSACTION:
+      return {
+        ...state, error: action.payload
+      }
     default:
       return state;
   }

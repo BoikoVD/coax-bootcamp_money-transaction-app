@@ -7,17 +7,17 @@ import SendmoneyForm from '../SendMoneyForm/SendMoneyForm';
 import classes from './SendMoneyButton.module.scss';
 
 function SendMoneyButton({ profile }) {
+  const user = useSelector(state => state.userReducer.userData);
   const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
+  const createTransaction = ({ amount }) => {
+    dispatch(actions.createTransactionAC(user.id, profile.user, amount));
+  };
 
   const sendMoneyHandle = () => {
     dispatch(actions.openModalAC(profile.id));
-  };
-
-  const editPersonalData = ({ newFirstName, newLastName }) => {
-    dispatch(actions.updateProfileDataAC(newFirstName, newLastName, profileId));
   };
 
   const closeModalHandle = () => {
@@ -49,7 +49,7 @@ function SendMoneyButton({ profile }) {
             .validateFields()
             .then((values) => {
               form.resetFields();
-              editPersonalData(values);
+              createTransaction(values);
             })
             .catch((info) => {
               console.log('Validate Failed:', info);

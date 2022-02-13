@@ -50,6 +50,7 @@ function* checkAuthWorker() {
       yield put(actions.setUserDataAC({ id: userId, email: userEmail }));
       yield put(actions.setProfileDataAC(profileData.data[0], true));
       yield put(actions.setContactsAC(contactsParser(contacts.data)));
+      yield put(actions.getTransactionListAC(userId));
       yield put(actions.setIsAuthAC(true));
     } catch (e) {
       yield put(actions.setErrorUserAC(e));
