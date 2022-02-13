@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Form, Input } from 'antd';
 import * as validationRules from '../../helpers/antdValidatorRules';
 
-function SendmoneyForm({ form }) {
+function SendMoneyForm({ form }) {
 
   return (
     <Form
@@ -14,7 +14,7 @@ function SendmoneyForm({ form }) {
         name="amount"
         label="Amount"
         required={false}
-        rules={validationRules.firstNameRules}
+        rules={validationRules.amountRules}
       >
         <Input />
       </Form.Item>
@@ -22,8 +22,8 @@ function SendmoneyForm({ form }) {
   )
 }
 
-SendmoneyForm.propTypes = {
+SendMoneyForm.propTypes = {
   form: PropTypes.object.isRequired
 }
 
-export default SendmoneyForm;
+export default SendMoneyForm;

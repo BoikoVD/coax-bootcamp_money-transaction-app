@@ -1,4 +1,5 @@
 import isStrongPassword from 'validator/es/lib/isStrongPassword';
+import isCurrency from 'validator/es/lib/isCurrency';
 
 export const emailRules = [
   { required: true, message: 'Please input your email!' },
@@ -50,4 +51,32 @@ export const resetConfiirmPasswordRules = [
       return Promise.reject("Passwords are not the same!")
     }
   })
+];
+
+export const amountRules = [
+  { required: true, message: 'Please input the amount!' },
+  {
+    validator: (_, value) => (
+      value && isCurrency(value, {
+        symbol: '$',
+        require_symbol: false,
+        allow_space_after_symbol: false,
+        symbol_after_digits: false,
+        allow_negatives: false,
+        parens_for_negatives: false,
+        negative_sign_before_digits: false,
+        negative_sign_after_digits: false,
+        allow_negative_sign_placeholder: false,
+        thousands_separator: ',',
+        decimal_separator: '.',
+        allow_decimal: true,
+        require_decimal: false,
+        digits_after_decimal: [2],
+        allow_space_after_digits: false
+      })
+        ?
+        Promise.resolve()
+        :
+        Promise.reject(`You entered the wrong format. Correct format is "0.00"`))
+  }
 ];

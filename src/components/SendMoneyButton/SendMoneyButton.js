@@ -11,6 +11,7 @@ function SendMoneyButton({ profile }) {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
+
   const sendMoneyHandle = () => {
     dispatch(actions.openModalAC(profile.id));
   };
@@ -47,6 +48,7 @@ function SendMoneyButton({ profile }) {
           form
             .validateFields()
             .then((values) => {
+              form.resetFields();
               editPersonalData(values);
             })
             .catch((info) => {
@@ -56,7 +58,7 @@ function SendMoneyButton({ profile }) {
       >
         <div className={classes.title}><span>{profile.firstName + " " + profile.lastName}</span></div>
         <div className={classes.info}>Email: <span>{profile.email}</span></div>
-        <div className={classes.balance}>Your balance: <span>1000</span></div>
+        <div className={classes.balance}>Your balance: <span>1000 $</span></div>
         <SendmoneyForm form={form} />
       </Modal >
     </>
