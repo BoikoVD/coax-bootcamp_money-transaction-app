@@ -8,6 +8,7 @@ import classes from './SendMoneyButton.module.scss';
 
 function SendMoneyButton({ profile }) {
   const user = useSelector(state => state.userReducer.userData);
+  const transactionsData = useSelector(state => state.transactionsReducer);
   const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
@@ -58,7 +59,7 @@ function SendMoneyButton({ profile }) {
       >
         <div className={classes.title}><span>{profile.firstName + " " + profile.lastName}</span></div>
         <div className={classes.info}>Email: <span>{profile.email}</span></div>
-        <div className={classes.balance}>Your balance: <span>1000 $</span></div>
+        <div className={classes.balance}>Your balance: <span>{transactionsData.balance} $</span></div>
         <SendmoneyForm form={form} />
       </Modal >
     </>

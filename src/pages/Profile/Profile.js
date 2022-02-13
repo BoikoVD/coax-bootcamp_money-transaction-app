@@ -55,7 +55,7 @@ function Profile() {
         <Spin size="large" />
       </div>
       :
-      <div>
+      <div className={classes.wrapper}>
         <Container className={classes.container}>
           <div className={classes.column}>
             <div className={classes.avatar}>

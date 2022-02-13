@@ -2,6 +2,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import * as types from '../types/types';
 import * as actions from '../actions/actions';
 import * as api from '../../services/apiService';
+import { removeDuplicates } from '../../helpers/helpers';
 
 function* createTransactionWorker({ payload }) {
   yield put(actions.isModalLoadingAC());
@@ -16,7 +17,8 @@ function* createTransactionWorker({ payload }) {
     const fromTransactions = yield call(api.getTransactionsRequest, from, "from");
     const toTransactions = yield call(api.getTransactionsRequest, from, "to");
     let startCount = 1000;
-    let fromCount, toCount = 0;
+    let fromCount = 0;
+    let toCount = 0;
     for (let f of fromTransactions.data) {
       if (f.from === f.to) {
         startCount = f.amount;
@@ -34,8 +36,7 @@ function* createTransactionWorker({ payload }) {
       throw new Error("Not enough money in your wallet");
     }
     const newTransaction = yield call(api.createTransactionRequest, from, to, amount);
-    console.log(newTransaction);
-    const newBalance = balance - amount;
+    const newBalance = Number((balance - amount).toFixed(2));
     yield put(actions.transactionSuccessAC(newBalance));
     yield put(actions.closeModalAC());
     yield put(actions.setModalMessageAC(
@@ -59,7 +60,8 @@ function* getTransactionListWorker({ payload }) {
     const fromTransactions = yield call(api.getTransactionsRequest, userId, "from");
     const toTransactions = yield call(api.getTransactionsRequest, userId, "to");
     let startCount = 1000;
-    let fromCount, toCount = 0;
+    let fromCount = 0;
+    let toCount = 0;
     for (let f of fromTransactions.data) {
       if (f.from === f.to) {
         startCount = f.amount;
@@ -72,10 +74,15 @@ function* getTransactionListWorker({ payload }) {
         toCount = toCount + t.amount;
       }
     }
-    const balance = startCount + toCount - fromCount;
+    const balance = Number((startCount + toCount - fromCount).toFixed(2));
     let transactions = [...fromTransactions.data, ...toTransactions.data];
+    transactions = removeDuplicates(transactions);
     transactions = transactions.map((t) => {
-      console.log(t.created_at);
+      if (t.to === userId) {
+        t.amount = "+ " + t.amount;
+      } else {
+        t.amount = "- " + t.amount;
+      }
       t.created_at = Date.parse(t.created_at);
       return t;
     });
@@ -90,7 +97,6 @@ function* getTransactionListWorker({ payload }) {
       }
     };
     const profiles = yield call(api.getContactProfilesRequest, profilesId);
-    console.log(profiles);
     transactions = transactions.map((t) => {
       for (let p of profiles.data) {
         if (p.user === t.from || p.user === t.to) {
@@ -98,6 +104,12 @@ function* getTransactionListWorker({ payload }) {
           t.lastName = p.lastName;
           t.email = p.email;
         }
+      }
+      t.key = t.id;
+      if (t.from === t.to) {
+        t.firstName = "-";
+        t.lastName = "-";
+        t.email = "Funding";
       }
       return t;
     });
