@@ -8,6 +8,7 @@ import classes from './Registration.module.scss';
 
 function Registration() {
   const userData = useSelector(store => store.userReducer);
+  const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,22 +17,25 @@ function Registration() {
   };
 
   const goToLoginHandle = () => {
+    dispatch(actions.closeModalAC());
     navigate("/login");
-    dispatch(actions.setIsModalVisibleUserAC(false));
   }
   const closeModalHandle = () => {
-    dispatch(actions.setIsModalVisibleUserAC(false));
+    dispatch(actions.closeModalAC());
   };
 
   React.useEffect(() => {
-    if (userData.error) {
-      message.error(
-        `${userData.error.response.data.msg}`,
-        5
-      );
-      dispatch(actions.setErrorUserAC(null));
+    if (modal.modalMessage) {
+      if (modal.modalMessageType === "error") {
+        message.error(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
+      if (modal.modalMessageType === "success") {
+        message.success(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
     }
-  }, [userData.error]);
+  }, [modal.modalMessage]);
 
   return (
     <div className={classes.wrapper}>
@@ -95,7 +99,7 @@ function Registration() {
       </div>
       <Modal
         title="Registration complete"
-        visible={userData.isModalVisible}
+        visible={modal.isModalVisible && modal.modalType === "registration"}
         centered
         style={{ maxWidth: "300px" }}
         bodyStyle={{ display: "flex", flexDirection: "column", alignItems: "center" }}

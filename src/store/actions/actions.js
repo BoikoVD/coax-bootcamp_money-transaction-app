@@ -26,10 +26,6 @@ export const setTransactionListAC = (list, newBalance) => ({ type: types.SET_TRA
 export const setErrorTransactionAC = (error) => ({ type: types.SET_ERROR_TRANSACTION, payload: error });
 
 //saga
-export const loginAC = (email, password, remember) => ({ type: types.LOGIN, payload: { email, password, remember } });
-export const logoutAC = () => ({ type: types.LOGOUT, payload: null });
-export const checkAuthAC = () => ({ type: types.CHECK_AUTH, payload: null });
-export const registrationAC = (email, firstName, lastName, password) => ({ type: types.REGISTRATION, payload: { email, firstName, lastName, password } });
 
 export const getProfileAC = (id) => ({ type: types.GET_PROFILE, payload: { id } });
 export const updateProfileDataAC = (newFirstName, newLastName, profileId) => ({ type: types.UPDATE_PROFILE_DATA, payload: { newFirstName, newLastName, profileId } });
@@ -46,9 +42,25 @@ export const createTransactionAC = (from, to, amount) => ({ type: types.CREATE_T
 export const getTransactionListAC = (userId) => ({ type: types.GET_TRANSACTION_LIST, payload: { userId } });
 
 
+
+
+
+///===================================
+export const loginAC = (email, password, remember) => ({ type: types.LOGIN, payload: { email, password, remember } });
+export const loginSuccessAC = (userData) => ({ type: types.LOGIN_SUCCESS, payload: { userData } });
+export const loginErrorAC = (error) => ({ type: types.LOGIN_ERROR, payload: { error } });
+export const logoutAC = () => ({ type: types.LOGOUT });
+export const checkAuthAC = () => ({ type: types.CHECK_AUTH });
+export const checkAuthSuccessAC = (isAuth, userData) => ({ type: types.CHECK_AUTH_SUCCESS, payload: { isAuth, userData } });
+export const checkAuthErrorAC = (error) => ({ type: types.CHECK_AUTH_ERROR, payload: { error } });
+export const registrationAC = (email, firstName, lastName, password) => ({ type: types.REGISTRATION, payload: { email, firstName, lastName, password } });
+export const registrationSuccessAC = () => ({ type: types.REGISTRATION_SUCCESS });
+export const registrationErrorAC = (error) => ({ type: types.REGISTRATION_ERROR, payload: { error } });
+
+
 //modal
-export const openModalAC = (type) => ({ type: types.OPEN_MODAL, payload: type });
-export const closeModalAC = () => ({ type: types.CLOSE_MODAL, payload: null });
-export const isModalLoadingAC = () => ({ type: types.IS_MODAL_LOADING, payload: null });
+export const openModalAC = (type) => ({ type: types.OPEN_MODAL, payload: { type } });
+export const closeModalAC = () => ({ type: types.CLOSE_MODAL });
+export const isModalLoadingAC = () => ({ type: types.IS_MODAL_LOADING });
 export const setModalMessageAC = (msg, type) => ({ type: types.SET_MODAL_MESSAGE, payload: { msg, type } });
-export const removeModalMessageAC = () => ({ type: types.REMOVE_MODAL_MESSAGE, payload: null });
+export const removeModalMessageAC = () => ({ type: types.REMOVE_MODAL_MESSAGE });

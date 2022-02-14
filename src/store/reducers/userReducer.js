@@ -7,31 +7,50 @@ const defaultState = {
   },
   isAuth: null,
   isLoading: false,
-  isModalVisible: false,
   error: null
 };
 
 export default function userReducer(state = defaultState, action) {
   switch (action.type) {
-    case types.SET_IS_AUTH:
+    case types.LOGIN:
       return {
-        ...state, isAuth: action.payload
+        ...state, isLoading: true
       }
-    case types.SET_USER_DATA:
+    case types.LOGIN_SUCCESS:
       return {
-        ...state, userData: action.payload
+        ...state, isAuth: true, userData: action.payload.userData, isLoading: false
       }
-    case types.SET_IS_LOADING_USER:
+    case types.LOGIN_ERROR:
       return {
-        ...state, isLoading: action.payload
+        ...state, error: action.payload.error, isLoading: false
       }
-    case types.SET_ERROR_USER:
+    case types.LOGOUT:
       return {
-        ...state, error: action.payload
+        ...state, userData: { id: null, email: null }, isAuth: false
       }
-    case types.SET_IS_MODAL_VISIBLE_USER:
+    case types.CHECK_AUTH:
       return {
-        ...state, isModalVisible: action.payload
+        ...state, isLoading: true
+      }
+    case types.CHECK_AUTH_SUCCESS:
+      return {
+        ...state, isAuth: action.payload.isAuth, userData: action.payload.userData, isLoading: false
+      }
+    case types.CHECK_AUTH_ERROR:
+      return {
+        ...state, error: action.payload.error, isLoading: false
+      }
+    case types.REGISTRATION:
+      return {
+        ...state, isLoading: true
+      }
+    case types.REGISTRATION_SUCCESS:
+      return {
+        ...state, isLoading: false
+      }
+    case types.REGISTRATION_ERROR:
+      return {
+        ...state, error: action.payload.error, isLoading: false
       }
     default:
       return state;

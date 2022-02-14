@@ -8,9 +8,7 @@ import * as actions from '../actions/actions';
 import * as api from '../../services/apiService';
 
 function* loginWorker({ payload }) {
-  yield put(actions.setIsLoadingUserAC(true));
   const { email, password, remember } = payload;
-
   try {
     const user = yield call(api.loginRequest, email, password);
 
@@ -28,24 +26,22 @@ function* loginWorker({ payload }) {
     yield getContactsWorker({ payload: { from: 0, to: 10, page: 1 } });
     yield getTransactionListWorker({ payload: { userId } });
 
-    yield put(actions.setUserDataAC({ id: userId, email: userEmail }));
-    yield put(actions.setIsAuthAC(true));
+    yield put(actions.loginSuccessAC({ id: userId, email: userEmail }));
   } catch (e) {
-    yield put(actions.setErrorUserAC(e));
+    yield put(actions.setModalMessageAC(
+      `${e.response.data.error_description}`,
+      "error"
+    ));
+    yield put(actions.loginErrorAC(e));
     console.log('LOGIN SAGA ERROR: ', e, e?.response);
   }
-
-  yield put(actions.setIsLoadingUserAC(false));
 };
 
 function* logoutWorker() {
   yield Cookies.remove('accessToken');
-  yield put(actions.setUserDataAC({ id: null, email: null }));
-  yield put(actions.setIsAuthAC(false));
 };
 
 function* checkAuthWorker() {
-  yield put(actions.setIsLoadingUserAC(true));
   const accessToken = yield Cookies.get('accessToken')
   if (accessToken) {
     try {
@@ -58,32 +54,36 @@ function* checkAuthWorker() {
       yield getContactsWorker({ payload: { from: 0, to: 10, page: 1 } });
       yield getTransactionListWorker({ payload: { userId } });
 
-      yield put(actions.setUserDataAC({ id: userId, email: userEmail }));
-      yield put(actions.setIsAuthAC(true));
+      yield put(actions.checkAuthSuccessAC(true, { id: userId, email: userEmail }));
     } catch (e) {
-      yield put(actions.setErrorUserAC(e));
-      console.log("CHECK AUTH SAGA ERROR: ", e);
+      yield put(actions.checkAuthErrorAC(e));
+      console.log("CHECK AUTH SAGA ERROR: ", e, e?.response);
     }
   } else {
-    yield put(actions.setIsAuthAC(false));
+    yield put(actions.checkAuthSuccessAC(false, { id: null, email: null }));
   }
-  yield put(actions.setIsLoadingUserAC(false));
 };
 
 function* registrationWorker({ payload }) {
-  yield put(actions.setIsLoadingUserAC(true));
+  const { email, firstName, lastName, password } = payload;
   try {
-    const { email, firstName, lastName, password } = payload;
     const createdUser = yield call(api.signUpRequest, email, password);
+
     const userId = createdUser.data.user.id;
     const accessToken = createdUser.data.access_token;
+
     yield call(api.createProfileRequest, userId, email, firstName, lastName, accessToken);
-    yield put(actions.setIsModalVisibleUserAC(true));
+
+    yield put(actions.registrationSuccessAC());
+    yield put(actions.openModalAC("registration"));
   } catch (e) {
-    yield put(actions.setErrorUserAC(e));
-    console.log('REGISTRATION SAGA ERROR: ', e.response.data);
+    yield put(actions.setModalMessageAC(
+      `${e.response.data.msg}`,
+      "error"
+    ));
+    yield put(actions.registrationErrorAC(e));
+    console.log('REGISTRATION SAGA ERROR: ', e, e?.response);
   }
-  yield put(actions.setIsLoadingUserAC(false));
 };
 
 export function* authenticationSaga() {

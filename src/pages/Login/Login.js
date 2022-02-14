@@ -9,6 +9,7 @@ import classes from './Login.module.scss';
 
 function Login() {
   const userData = useSelector(store => store.userReducer);
+  const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
 
   const loginHandle = ({ email, password, remember }) => {
@@ -16,14 +17,17 @@ function Login() {
   };
 
   React.useEffect(() => {
-    if (userData.error) {
-      message.error(
-        `${userData.error.response.data.error_description}`,
-        5
-      );
-      dispatch(actions.setErrorUserAC(null));
+    if (modal.modalMessage) {
+      if (modal.modalMessageType === "error") {
+        message.error(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
+      if (modal.modalMessageType === "success") {
+        message.success(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
     }
-  }, [userData.error]);
+  }, [modal.modalMessage]);
 
   return (
     <div className={classes.wrapper}>

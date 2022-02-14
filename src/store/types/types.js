@@ -24,10 +24,6 @@ export const SET_TRANSACTION_LIST = "SET_TRANSACTION_LIST";
 export const SET_ERROR_TRANSACTION = "SET_ERROR_TRANSACTION";
 
 //saga
-export const LOGIN = "LOGIN";
-export const LOGOUT = "LOGOUT";
-export const CHECK_AUTH = "CHECK_AUTH";
-export const REGISTRATION = "REGISTRATION";
 
 export const GET_PROFILE = "GET_PROFILE";
 export const UPDATE_PROFILE_DATA = "UPDATE_PROFILE_DATA";
@@ -42,6 +38,21 @@ export const DELETE_CONTACT = "DELETE_CONTACT";
 
 export const CREATE_TRANSACTION = "CREATE_TRANSACTION";
 export const GET_TRANSACTION_LIST = "GET_TRANSACTION_LIST";
+
+
+
+
+///=============================================
+export const LOGIN = "LOGIN";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_ERROR = "LOGIN_ERROR";
+export const LOGOUT = "LOGOUT";
+export const CHECK_AUTH = "CHECK_AUTH";
+export const CHECK_AUTH_SUCCESS = "CHECK_AUTH_SUCCESS";
+export const CHECK_AUTH_ERROR = "CHECK_AUTH_ERROR";
+export const REGISTRATION = "REGISTRATION";
+export const REGISTRATION_SUCCESS = "REGISTRATION_SUCCESS";
+export const REGISTRATION_ERROR = "REGISTRATION_ERROR";
 
 
 //modal

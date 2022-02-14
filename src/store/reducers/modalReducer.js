@@ -12,7 +12,7 @@ export default function modalReducer(state = defaultState, action) {
   switch (action.type) {
     case types.OPEN_MODAL:
       return {
-        ...state, isModalVisible: true, modalType: action.payload
+        ...state, isModalVisible: true, modalType: action.payload.type
       }
     case types.CLOSE_MODAL:
       return {
