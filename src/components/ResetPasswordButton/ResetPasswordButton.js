@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal, Form, Spin } from 'antd';
-import { RESET_PASSWORD } from '../../store/types/modalTypes';
 import * as actions from '../../store/actions/actions';
 import ResetPasswordForm from '../ResetPasswordForm/ResetPasswordForm';
 import classes from './ResetPasswordButton.module.scss';
@@ -16,7 +15,7 @@ function ResetPasswordButton() {
   };
 
   const resetPasswordHandle = () => {
-    dispatch(actions.openModalAC(RESET_PASSWORD));
+    dispatch(actions.openModalAC("RESET_PASSWORD"));
   };
   const closeModalHandle = () => {
     dispatch(actions.closeModalAC());
@@ -34,7 +33,7 @@ function ResetPasswordButton() {
         Reset Password
       </Button>
       <Modal
-        visible={modal.isModalVisible && modal.modalType === RESET_PASSWORD}
+        visible={modal.isModalVisible && modal.modalType === "RESET_PASSWORD"}
         title="Reset password"
         centered
         style={{ maxWidth: "300px" }}

@@ -20,11 +20,11 @@ function Profile() {
   const dispatch = useDispatch();
 
   const addContactHandler = () => {
-    dispatch(actions.addContactFromProfileAC(profile.profileData.user));
+    dispatch(actions.addThisUserToContactAC(profile.profileData.user));
   };
 
   const deleteContactHandler = () => {
-    dispatch(actions.deleteContactFromProfileAC(profile.profileData.user));
+    dispatch(actions.deleteThisUserFromContactsAC(profile.profileData.user));
   };
 
   React.useEffect(() => {
@@ -33,7 +33,7 @@ function Profile() {
 
   React.useEffect(() => {
     if (profile.error) {
-      dispatch(actions.setErrorProfileAC(null));
+      dispatch(actions.getProfileErrorAC(null));
       navigate("/not-found", { replace: true });
     }
   }, [profile.error]);

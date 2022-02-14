@@ -17,15 +17,19 @@ const defaultState = {
 
 export default function profileReducer(state = defaultState, action) {
   switch (action.type) {
-    case types.SET_IS_LOADING_PROFILE:
+    case types.GET_PROFILE:
       return {
-        ...state, isLoading: action.payload
+        ...state, isLoading: true
       }
-    case types.SET_PROFILE_DATA:
+    case types.GET_PROFILE_SUCCESS:
       return {
         ...state, profileData: action.payload.profileData, isCurrent: action.payload.isCurrent
       }
-    case types.SET_UPDATED_PROFILE_DATA:
+    case types.GET_PROFILE_ERROR:
+      return {
+        ...state, error: action.payload.error, isLoading: false
+      }
+    case types.EDIT_PROFILE_DATA_SUCCESS:
       return {
         ...state, profileData: {
           ...state.profileData,
@@ -33,11 +37,31 @@ export default function profileReducer(state = defaultState, action) {
           lastName: action.payload.lastName
         }
       }
-    case types.SET_ERROR_PROFILE:
+    case types.EDIT_PROFILE_DATA_ERROR:
       return {
-        ...state, error: action.payload
+        ...state, error: action.payload.error
       }
-    case types.IS_LOADING_THIS_PROFILE:
+    case types.ADD_THIS_USER_TO_CONTACTS:
+      return {
+        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+      }
+    case types.ADD_THIS_USER_TO_CONTACTS_SUCCESS:
+      return {
+        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+      }
+    case types.ADD_THIS_USER_TO_CONTACTS_ERROR:
+      return {
+        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+      }
+    case types.DELETE_THIS_USER_FROM_CONTACTS:
+      return {
+        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+      }
+    case types.DELETE_THIS_USER_FROM_CONTACTS_SUCCESS:
+      return {
+        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+      }
+    case types.DELETE_THIS_USER_FROM_CONTACTS_ERROR:
       return {
         ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
       }
