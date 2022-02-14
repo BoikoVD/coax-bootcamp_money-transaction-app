@@ -5,8 +5,8 @@ import * as api from '../../services/apiService';
 import { removeDuplicates } from '../../helpers/helpers';
 
 function* createTransactionWorker({ payload }) {
-  yield put(actions.isModalLoadingAC());
   const { from, to, amount } = payload;
+
   try {
     if (amount <= 0) {
       throw new Error("Please enter the amount of money you want to send");
@@ -16,6 +16,7 @@ function* createTransactionWorker({ payload }) {
     }
     const fromTransactions = yield call(api.getTransactionsRequest, from, "from");
     const toTransactions = yield call(api.getTransactionsRequest, from, "to");
+
     let startCount = 1000;
     let fromCount = 0;
     let toCount = 0;
@@ -35,9 +36,11 @@ function* createTransactionWorker({ payload }) {
     if (balance < amount) {
       throw new Error("Not enough money in your wallet");
     }
+
     const newTransaction = yield call(api.createTransactionRequest, from, to, amount);
     const newBalance = Number((balance - amount).toFixed(2));
-    yield put(actions.transactionSuccessAC(newBalance));
+
+    yield put(actions.createTransactionSuccessAC(newBalance));
     yield put(actions.closeModalAC());
     yield put(actions.setModalMessageAC(
       "The transaction was completed successfully!",
@@ -48,18 +51,17 @@ function* createTransactionWorker({ payload }) {
       "Something is wrong. Please try again later!",
       "error"
     ));
-    console.log("CREATE TRANSACTION SAGA ERROR: ", e);
+    console.log("CREATE TRANSACTION SAGA ERROR: ", e, e.response);
   }
-  yield put(actions.isModalLoadingAC());
 };
 
 export function* getTransactionListWorker({ payload }) {
-  yield put(actions.isLoadingTransactionsAC());
   const { userId } = payload;
-  console.log(userId);
+
   try {
     const fromTransactions = yield call(api.getTransactionsRequest, userId, "from");
     const toTransactions = yield call(api.getTransactionsRequest, userId, "to");
+
     let startCount = 1000;
     let fromCount = 0;
     let toCount = 0;
@@ -76,6 +78,7 @@ export function* getTransactionListWorker({ payload }) {
       }
     }
     const balance = Number((startCount + toCount - fromCount).toFixed(2));
+
     let transactions = [...fromTransactions.data, ...toTransactions.data];
     transactions = removeDuplicates(transactions);
     transactions = transactions.map((t) => {
@@ -97,6 +100,7 @@ export function* getTransactionListWorker({ payload }) {
         profilesId.push(t.to);
       }
     };
+
     const profiles = yield call(api.getContactProfilesRequest, profilesId);
     transactions = transactions.map((t) => {
       for (let p of profiles.data) {
@@ -115,12 +119,11 @@ export function* getTransactionListWorker({ payload }) {
       return t;
     });
 
-    yield put(actions.setTransactionListAC(transactions, balance));
+    yield put(actions.getTransactionListSuccessAC(transactions, balance));
   } catch (e) {
-    yield put(actions.setErrorTransactionAC(e));
-    console.log("GET TRANSACTION LIST SAGA ERROR: ", e);
+    yield put(actions.getTransactionListErrorAC(e));
+    console.log("GET TRANSACTION LIST SAGA ERROR: ", e, e.response);
   }
-  yield put(actions.isLoadingTransactionsAC());
 };
 
 export function* transactionsSaga() {

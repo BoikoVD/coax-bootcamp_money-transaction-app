@@ -9,21 +9,29 @@ const defaultState = {
 
 export default function transactionsReducer(state = defaultState, action) {
   switch (action.type) {
-    case types.IS_LOADING_TRANSACTIONS:
+    case types.CREATE_TRANSACTION:
       return {
-        ...state, isLoading: !state.isLoading
+        ...state, isLoading: true
       }
-    case types.TRANSACTION_SUCCESS:
+    case types.CREATE_TRANSACTION_SUCCESS:
       return {
-        ...state, balance: action.payload.newBalance
+        ...state, balance: action.payload.newBalance, isLoading: false
       }
-    case types.SET_TRANSACTION_LIST:
+    case types.CREATE_TRANSACTION_ERROR:
       return {
-        ...state, transactions: action.payload.list, balance: action.payload.newBalance
+        ...state, isLoading: false
       }
-    case types.SET_ERROR_TRANSACTION:
+    case types.GET_TRANSACTION_LIST:
       return {
-        ...state, error: action.payload
+        ...state, isLoading: true
+      }
+    case types.GET_TRANSACTION_LIST_SUCCESS:
+      return {
+        ...state, transactions: action.payload.list, balance: action.payload.newBalance, isLoading: false
+      }
+    case types.GET_TRANSACTION_LIST_ERROR:
+      return {
+        ...state, error: action.payload.error, isLoading: false
       }
     default:
       return state;

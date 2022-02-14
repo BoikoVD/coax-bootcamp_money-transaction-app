@@ -1,16 +1,5 @@
 import * as types from '../types/types';
 
-export const isLoadingTransactionsAC = () => ({ type: types.IS_LOADING_TRANSACTIONS, payload: null });
-export const transactionSuccessAC = (newBalance) => ({ type: types.TRANSACTION_SUCCESS, payload: { newBalance } });
-export const setTransactionListAC = (list, newBalance) => ({ type: types.SET_TRANSACTION_LIST, payload: { list, newBalance } });
-export const setErrorTransactionAC = (error) => ({ type: types.SET_ERROR_TRANSACTION, payload: error });
-
-//saga
-export const createTransactionAC = (from, to, amount) => ({ type: types.CREATE_TRANSACTION, payload: { from, to, amount } });
-export const getTransactionListAC = (userId) => ({ type: types.GET_TRANSACTION_LIST, payload: { userId } });
-
-
-///===================================
 export const loginAC = (email, password, remember) => ({ type: types.LOGIN, payload: { email, password, remember } });
 export const loginSuccessAC = (userData) => ({ type: types.LOGIN_SUCCESS, payload: { userData } });
 export const loginErrorAC = (error) => ({ type: types.LOGIN_ERROR, payload: { error } });
@@ -52,8 +41,13 @@ export const deleteContactAC = (id) => ({ type: types.DELETE_CONTACT, payload: {
 export const deleteContactSuccessAC = (contacts, id) => ({ type: types.DELETE_CONTACT_SUCCESS, payload: { contacts, id } });
 export const deleteContactErrorAC = (id) => ({ type: types.DELETE_CONTACT_ERROR, payload: { id } });
 
+export const createTransactionAC = (from, to, amount) => ({ type: types.CREATE_TRANSACTION, payload: { from, to, amount } });
+export const createTransactionSuccessAC = (newBalance) => ({ type: types.CREATE_TRANSACTION_SUCCESS, payload: { newBalance } });
+export const createTransactionErrorAC = () => ({ type: types.CREATE_TRANSACTION_ERROR });
+export const getTransactionListAC = (userId) => ({ type: types.GET_TRANSACTION_LIST, payload: { userId } });
+export const getTransactionListSuccessAC = (list, newBalance) => ({ type: types.GET_TRANSACTION_LIST_SUCCESS, payload: { list, newBalance } });
+export const getTransactionListErrorAC = (error) => ({ type: types.GET_TRANSACTION_LIST_ERROR, payload: { error } });
 
-//modal
 export const openModalAC = (type) => ({ type: types.OPEN_MODAL, payload: { type } });
 export const closeModalAC = () => ({ type: types.CLOSE_MODAL });
 export const isModalLoadingAC = () => ({ type: types.IS_MODAL_LOADING });
