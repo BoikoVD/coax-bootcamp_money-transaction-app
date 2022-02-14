@@ -67,10 +67,10 @@ function ProfileTitle({ isCurrent, firstName, lastName, profileId }) {
 }
 
 ProfileTitle.propTypes = {
-  isCurrent: PropTypes.bool.isRequired,
-  firstName: PropTypes.string.isRequired,
-  lastName: PropTypes.string.isRequired,
-  profileId: PropTypes.string.isRequired,
+  isCurrent: PropTypes.bool,
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  profileId: PropTypes.string,
 }
 
 export default ProfileTitle;

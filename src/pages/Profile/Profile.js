@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { format, parseJSON } from 'date-fns';
-import { Spin, message } from 'antd';
+import { Spin, message, Row, Col } from 'antd';
 import * as actions from '../../store/actions/actions';
 import Container from '../../components/Container/Container';
 import ProfileTitle from '../../components/ProfileTitle/ProfileTitle';
@@ -13,10 +13,19 @@ import classes from './Profile.module.scss';
 
 function Profile() {
   const profile = useSelector(state => state.profileReducer);
+  const transactionsData = useSelector(state => state.transactionsReducer);
   const modal = useSelector(state => state.modalReducer);
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const addContactHandler = () => {
+    dispatch(actions.addContactFromProfileAC(profile.profileData.user));
+  };
+
+  const deleteContactHandler = () => {
+    dispatch(actions.deleteContactFromProfileAC(profile.profileData.user));
+  };
 
   React.useEffect(() => {
     dispatch(actions.getProfileAC(id));
@@ -55,36 +64,63 @@ function Profile() {
         <Spin size="large" />
       </div>
       :
-      <div className={classes.wrapper}>
-        <Container className={classes.container}>
-          <div className={classes.column}>
+      <Container className={classes.container}>
+        <Row className={classes.wrapper}>
+          <Col
+            xs={{ span: 24 }} sm={{ span: 6 }} md={{ span: 6 }} lg={{ span: 6 }} xl={{ span: 5 }}
+            className={classes.avatarWrapper}
+          >
             <div className={classes.avatar}>
               <img src={AvatarIcon} alt='Avatar' />
             </div>
-          </div>
-          <div className={classes.column}>
-            <ProfileTitle
-              isCurrent={profile.isCurrent}
-              firstName={profile.profileData.firstName}
-              lastName={profile.profileData.lastName}
-              profileId={profile.profileData.id}
-            />
-            <div className={classes.info}>
-              <span>Email: </span>
-              {profile.profileData.email}
+          </Col>
+          <Col
+            xs={{ span: 24 }} sm={{ span: 12 }} md={{ span: 12 }} lg={{ span: 12 }} xl={{ span: 13 }}
+            className={classes.infoWrapper}
+          >
+            <div className={classes.infoBlock}>
+              <ProfileTitle
+                isCurrent={profile.isCurrent}
+                firstName={profile.profileData.firstName}
+                lastName={profile.profileData.lastName}
+                profileId={profile.profileData.id}
+              />
+              <div className={classes.info}>
+                Email: <span>
+                  {profile.profileData.email}
+                </span>
+              </div>
+              <div className={classes.info}>
+                Registered: <span>
+                  {format(parseJSON(profile.profileData.created_at), "dd.MM.yyyy")}
+                </span>
+              </div>
+              {profile.isCurrent
+                ?
+                <ResetPasswordButton />
+                :
+                <ContactActionButtons
+                  profile={profile.profileData}
+                  className={classes.actionButtons}
+                  addContact={addContactHandler}
+                  deleteContact={deleteContactHandler}
+                />}
             </div>
-            <div className={classes.info}>
-              <span>Registered: </span>
-              {format(parseJSON(profile.profileData.created_at), "dd.MM.yyyy")}
-            </div>
+          </Col>
+          <Col
+            xs={{ span: 24 }} sm={{ span: 6 }} md={{ span: 6 }} lg={{ span: 6 }} xl={{ span: 6 }}
+            className={classes.balanceWrapper}
+          >
             {profile.isCurrent
               ?
-              <ResetPasswordButton />
-              :
-              <ContactActionButtons profile={profile} />}
-          </div>
-        </Container>
-      </div>
+              <>
+                <div className={classes.balanceTitle}>Your balance</div>
+                <div className={classes.balance}>{transactionsData.balance} $</div>
+              </>
+              : null}
+          </Col>
+        </Row>
+      </Container>
   )
 }
 

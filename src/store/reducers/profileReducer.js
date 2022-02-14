@@ -7,7 +7,8 @@ const defaultState = {
     firstName: null,
     lastName: null,
     user: null,
-    created_at: new Date()
+    created_at: new Date(),
+    isLogin: false
   },
   isCurrent: true,
   isLoading: false,
@@ -35,6 +36,10 @@ export default function profileReducer(state = defaultState, action) {
     case types.SET_ERROR_PROFILE:
       return {
         ...state, error: action.payload
+      }
+    case types.IS_LOADING_THIS_PROFILE:
+      return {
+        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
       }
     default:
       return state;

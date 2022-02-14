@@ -12,24 +12,32 @@
 }
 
 .title {
-  font-size: 20px;
-  span {
-    font-weight: 700;
-  }
+	font-size: 20px;
+
+	span {
+		font-weight: 700;
+	}
 }
+
 .info {
-  font-size: 14px;
-  margin-bottom: 15px;
-  span {
-    font-weight: 500;
-  }
+	margin-bottom: 15px;
+
+	font-size: 14px;
+
+	span {
+		font-weight: 500;
+	}
 }
+
 .balance {
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 15px;
-  span {
-    color: #1890ff;
-    font-size: 18px;
-  }
+	margin-bottom: 15px;
+
+	font-size: 16px;
+	font-weight: 500;
+
+	span {
+		color: #1890FF;
+
+		font-size: 18px;
+	}
 }

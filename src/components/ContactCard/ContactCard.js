@@ -1,12 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { format, parseJSON } from 'date-fns';
 import { Row, Col } from 'antd';
 import ContactActionButtons from '../ContactActionButtons/ContactActionButtons';
+import * as actions from '../../store/actions/actions';
 import AvatarIcon from '../../assets/icons/profile.svg';
 import classes from './ContactCard.module.scss';
 
 function ContactCard({ profile }) {
+  const dispatch = useDispatch();
+
+  const addContactHandler = () => {
+    dispatch(actions.addContactAC(profile.user));
+  };
+
+  const deleteContactHandler = () => {
+    dispatch(actions.deleteContactAC(profile.user));
+  };
 
   return (
     <Row align="middle" className={classes.card}>
@@ -17,7 +29,9 @@ function ContactCard({ profile }) {
       </Col>
       <Col xs={{ span: 17 }} sm={{ span: 12 }} md={{ span: 12 }} lg={{ span: 13 }} className={classes.data}>
         <div className={classes.title}>
-          {profile.firstName + " " + profile.lastName}
+          <Link to={`/profile/${profile.user}`} className={classes.link}>
+            {profile.firstName + " " + profile.lastName}
+          </Link>
         </div>
         <div className={classes.info}>
           Email: <span>{profile.email}</span>
@@ -27,7 +41,11 @@ function ContactCard({ profile }) {
         </div>
       </Col>
       <Col xs={{ span: 24 }} sm={{ span: 6 }} md={{ span: 6 }} lg={{ span: 6 }}>
-        <ContactActionButtons profile={profile} />
+        <ContactActionButtons
+          profile={profile}
+          addContact={addContactHandler}
+          deleteContact={deleteContactHandler}
+        />
       </Col>
     </Row >
   )

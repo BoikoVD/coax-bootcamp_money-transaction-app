@@ -10,6 +10,7 @@ export const setProfileDataAC = (profileData, isCurrent) => ({ type: types.SET_P
 export const setUpdatedProfileDataAC = (firstName, lastName) => ({ type: types.SET_UPDATED_PROFILE_DATA, payload: { firstName, lastName } });
 export const setIsLoadingProfileAC = (isLoading) => ({ type: types.SET_IS_LOADING_PROFILE, payload: isLoading });
 export const setErrorProfileAC = (error) => ({ type: types.SET_ERROR_PROFILE, payload: error });
+export const isLoadingThisProfileAC = () => ({ type: types.IS_LOADING_THIS_PROFILE, payload: null });
 
 export const setOneContactAC = (contactId) => ({ type: types.SET_ONE_CONTACT, payload: contactId });
 export const setContactsAC = (contacts) => ({ type: types.SET_CONTACTS, payload: contacts });
@@ -24,7 +25,7 @@ export const transactionSuccessAC = (newBalance) => ({ type: types.TRANSACTION_S
 export const setTransactionListAC = (list, newBalance) => ({ type: types.SET_TRANSACTION_LIST, payload: { list, newBalance } });
 export const setErrorTransactionAC = (error) => ({ type: types.SET_ERROR_TRANSACTION, payload: error });
 
-
+//saga
 export const loginAC = (email, password, remember) => ({ type: types.LOGIN, payload: { email, password, remember } });
 export const logoutAC = () => ({ type: types.LOGOUT, payload: null });
 export const checkAuthAC = () => ({ type: types.CHECK_AUTH, payload: null });
@@ -33,6 +34,8 @@ export const registrationAC = (email, firstName, lastName, password) => ({ type:
 export const getProfileAC = (id) => ({ type: types.GET_PROFILE, payload: { id } });
 export const updateProfileDataAC = (newFirstName, newLastName, profileId) => ({ type: types.UPDATE_PROFILE_DATA, payload: { newFirstName, newLastName, profileId } });
 export const resetPasswordAC = (newPassword) => ({ type: types.RESET_PASSWORD, payload: { newPassword } });
+export const addContactFromProfileAC = (id) => ({ type: types.ADD_CONTACT_FROM_PROFILE, payload: { id } });
+export const deleteContactFromProfileAC = (id) => ({ type: types.DELETE_CONTACT_FROM_PROFILE, payload: { id } });
 
 export const getContactsAC = (from, to, page) => ({ type: types.GET_CONTACTS, payload: { from, to, page } });
 export const getAllProfilesAC = (from, to, page) => ({ type: types.GET_ALL_PROFILES, payload: { from, to, page } });
@@ -43,7 +46,7 @@ export const createTransactionAC = (from, to, amount) => ({ type: types.CREATE_T
 export const getTransactionListAC = (userId) => ({ type: types.GET_TRANSACTION_LIST, payload: { userId } });
 
 
-
+//modal
 export const openModalAC = (type) => ({ type: types.OPEN_MODAL, payload: type });
 export const closeModalAC = () => ({ type: types.CLOSE_MODAL, payload: null });
 export const isModalLoadingAC = () => ({ type: types.IS_MODAL_LOADING, payload: null });

@@ -8,11 +8,12 @@ function* profilePageWorker({ payload }) {
   const { id } = payload;
   if (id) {
     try {
-      const profile = yield call(api.getProfileRequest, id);
-      if (profile.data.length === 0) {
+      const response = yield call(api.getProfileRequest, id);
+      if (response.data.length === 0) {
         throw new Error("Profile not found");
       } else {
-        yield put(actions.setProfileDataAC(profile.data[0], false));
+        const profile = { ...response.data[0], isLoading: false };
+        yield put(actions.setProfileDataAC(profile, false));
       }
     } catch (e) {
       yield put(actions.setErrorProfileAC(e));
@@ -21,8 +22,9 @@ function* profilePageWorker({ payload }) {
   } else {
     try {
       const currentUser = yield select(s => s.userReducer.userData);
-      const profile = yield call(api.getProfileRequest, currentUser.id);
-      yield put(actions.setProfileDataAC(profile.data[0], true));
+      const response = yield call(api.getProfileRequest, currentUser.id);
+      const profile = { ...response.data[0], isLoading: false };
+      yield put(actions.setProfileDataAC(profile, true));
     } catch (e) {
       yield put(actions.setErrorProfileAC(e));
       console.log("PROFILE MY PAGE SAGA ERROR: ", e);
@@ -72,8 +74,39 @@ function* resetPasswordWorker({ payload }) {
   yield put(actions.isModalLoadingAC());
 };
 
+function* addContactWorker({ payload }) {
+  yield put(actions.isLoadingThisProfileAC());
+  const { id } = payload;
+  try {
+    const user = yield select(s => s.userReducer.userData);
+    const response = yield call(api.addContactRequest, user.id, id);
+    console.log(response.data[0].contact);
+    yield put(actions.setOneContactAC(response.data[0].contact));
+  } catch (e) {
+    console.log("ADD CONTACT FROM PAGE SAGA ERROR: ", e.response.data);
+  }
+  yield put(actions.isLoadingThisProfileAC());
+};
+
+function* deleteContactWorker({ payload }) {
+  yield put(actions.isLoadingThisProfileAC());
+  const { id } = payload;
+  try {
+    const user = yield select(s => s.userReducer.userData);
+    const userContacts = yield select(s => s.contactsReducer.userContacts);
+    yield call(api.deleteContactRequest, user.id, id);
+    const newContacts = userContacts.filter((i) => i !== id);
+    yield put(actions.setContactsAC(newContacts));
+  } catch (e) {
+    console.log("ADD CONTACT FROM PAGE SAGA ERROR: ", e.response.data);
+  }
+  yield put(actions.isLoadingThisProfileAC());
+};
+
 export function* profileSaga() {
   yield takeEvery(types.GET_PROFILE, profilePageWorker);
   yield takeEvery(types.UPDATE_PROFILE_DATA, updateProfileDataWorker);
   yield takeEvery(types.RESET_PASSWORD, resetPasswordWorker);
+  yield takeEvery(types.ADD_CONTACT_FROM_PROFILE, addContactWorker);
+  yield takeEvery(types.DELETE_CONTACT_FROM_PROFILE, deleteContactWorker);
 };

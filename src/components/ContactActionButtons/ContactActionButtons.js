@@ -1,16 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Spin } from 'antd';
-import * as actions from '../../store/actions/actions';
 import classes from './ContactActionButtons.module.scss';
 import SendMoneyButton from '../SendMoneyButton/SendMoneyButton';
 
-function ContactActionButtons({ profile }) {
+function ContactActionButtons({ profile, className, addContact, deleteContact }) {
   const [isFriend, setIsFriend] = React.useState(false);
   const userContacts = useSelector(state => state.contactsReducer.userContacts);
-  const dispatch = useDispatch();
+
+  const buttonWrapperStyles = className
+    ?
+    cn(classes.buttonsWrapper, className)
+    :
+    classes.buttonsWrapper;
 
   React.useEffect(() => {
     let check = false;
@@ -25,18 +29,10 @@ function ContactActionButtons({ profile }) {
     if (!check) {
       setIsFriend(false);
     }
-  }, [profile.user, userContacts]);
-
-  const addContactHandler = () => {
-    dispatch(actions.addContactAC(profile.user));
-  };
-
-  const deleteContactHandler = () => {
-    dispatch(actions.deleteContactAC(profile.user));
-  };
+  });
 
   return (
-    <div className={classes.buttonsWrapper}>
+    <div className={buttonWrapperStyles}>
       {isFriend
         ?
         <>
@@ -46,7 +42,7 @@ function ContactActionButtons({ profile }) {
             size="small"
             ghost
             danger
-            onClick={deleteContactHandler}
+            onClick={deleteContact}
             disabled={profile.isLoading}
             className={cn(classes.button, classes.deleteBtn)}
           >
@@ -57,7 +53,7 @@ function ContactActionButtons({ profile }) {
         <Button
           type="primary"
           size="middle"
-          onClick={addContactHandler}
+          onClick={addContact}
           disabled={profile.isLoading}
           className={cn(classes.button, classes.addBtn)}
         >
@@ -75,7 +71,10 @@ ContactActionButtons.propTypes = {
     user: PropTypes.string,
     created_at: PropTypes.string,
     isLoading: PropTypes.bool
-  })
+  }),
+  className: PropTypes.string,
+  addContact: PropTypes.func,
+  deleteContact: PropTypes.func
 };
 
 export default ContactActionButtons;

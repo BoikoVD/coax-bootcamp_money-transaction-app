@@ -1,25 +1,25 @@
-.wrapper {
-  max-width: 1000px;
+.container {
+	max-width: 1000px;
 
-  margin: 0 auto;
+	margin: 0 auto;
 }
 
-.container {
+.wrapper {
 	display: flex;
 	align-items: center;
 
 	width: 100%;
 }
 
-.column {
-	&:last-child {
-		margin-left: 20px;
-	}
+.avatarWrapper {
+	// @media (max-width: 575px){
+	//   display: flex !important;
+	//   justify-content: center;
+	// }
 }
 
 .avatar {
-	width: 200px;
-	height: 200px;
+	height: 100%;
 	padding: 20px;
 
 	border-radius: 50%;
@@ -30,12 +30,125 @@
 
 		border-radius: 50%;
 	}
+
+	@media (max-width: 992px) {
+		padding: 10px;
+	}
+
+	@media (max-width: 575px) {
+		width: 250px;
+		height: 250px;
+		margin: 0 auto;
+	}
+}
+
+.infoWrapper {
+	@media (max-width: 992px) {
+		padding-left: 10px;
+	}
+
+	// @media (max-width: 575px){
+	//   display: flex !important;
+	//   justify-content: center;
+	// }
+	// @media (max-width: 400px){
+	//   padding-left: 0px;
+	//   justify-content: flex-start;
+	// }
+}
+
+.infoBlock {
+	@media (max-width: 575px) {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
 }
 
 .info {
 	margin-bottom: 5px;
 
+	font-size: 14px;
+
 	span {
-		font-weight: 700;
+		font-size: 16px;
+		font-weight: 600;
+	}
+
+	@media (max-width: 992px) {
+		margin-bottom: 0;
+
+		span {
+			font-size: 14px;
+			font-weight: 600;
+		}
+	}
+}
+
+.balanceWrapper {
+	// display: flex;
+	// flex-direction: column;
+	// align-items: center;
+	@media (max-width: 575px) {
+		margin-top: 15px;
+	}
+
+	// @media (max-width: 400px){
+	//   justify-content: flex-start;
+	// }
+}
+
+.balanceTitle {
+	margin-bottom: 15px;
+
+	font-size: 24px;
+	font-weight: 500;
+
+	@media (max-width: 992px) {
+		margin-bottom: 5px;
+
+		text-align: center;
+
+		font-size: 20px;
+	}
+
+	@media (max-width: 575px) {
+		margin-bottom: 0;
+	}
+}
+
+.balance {
+	white-space: nowrap;
+
+	color: #1890FF;
+
+	font-size: 50px;
+	font-weight: 700;
+	line-height: 50px;
+
+	@media (max-width: 992px) {
+		text-align: center;
+
+		font-size: 40px;
+	}
+
+	@media (max-width: 575px) {
+		margin-left: 10px;
+
+		font-size: 30px;
+	}
+}
+
+.actionButtons {
+	align-items: center;
+	flex-direction: row;
+
+	@media (max-width: 575px) {
+		flex-direction: column;
+
+		button {
+			margin-top: 10px;
+			margin-left: 0;
+		}
 	}
 }
