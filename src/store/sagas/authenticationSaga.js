@@ -1,33 +1,40 @@
 import Cookies from 'js-cookie';
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { contactsParser } from '../../helpers/helpers';
+import { getTransactionListWorker } from './transactionsSaga';
+import { getOwnContactsWorker, getContactsWorker } from './contactsSaga';
+import { getCurrentProfileWorker } from './profileSaga';
 import * as types from '../types/types';
 import * as actions from '../actions/actions';
 import * as api from '../../services/apiService';
 
 function* loginWorker({ payload }) {
   yield put(actions.setIsLoadingUserAC(true));
+  const { email, password, remember } = payload;
+
   try {
-    const { email, password, remember } = payload;
     const user = yield call(api.loginRequest, email, password);
+
     const userId = user.data.user.id;
     const userEmail = user.data.user.email;
     const accessToken = user.data.access_token;
     const expiresIn = user.data.expires_in / 60 / 60 / 24;
+
     if (remember) {
       yield Cookies.set('accessToken', `${accessToken}`, { expires: expiresIn });
     }
-    const profileData = yield call(api.getProfileRequest, userId, "user");
-    const contacts = yield call(api.getOwnContactsRequest, userId);
+
+    yield getCurrentProfileWorker({ payload: { userId } });
+    yield getOwnContactsWorker({ payload: { userId } });
+    yield getContactsWorker({ payload: { from: 0, to: 10, page: 1 } });
+    yield getTransactionListWorker({ payload: { userId } });
 
     yield put(actions.setUserDataAC({ id: userId, email: userEmail }));
-    yield put(actions.setProfileDataAC(profileData.data[0], true));
-    yield put(actions.setContactsAC(contactsParser(contacts.data)));
     yield put(actions.setIsAuthAC(true));
   } catch (e) {
     yield put(actions.setErrorUserAC(e));
-    console.log('LOGIN SAGA ERROR: ', e);
+    console.log('LOGIN SAGA ERROR: ', e, e?.response);
   }
+
   yield put(actions.setIsLoadingUserAC(false));
 };
 
@@ -45,12 +52,13 @@ function* checkAuthWorker() {
       const user = yield call(api.getUserRequest);
       const userId = user.data.id;
       const userEmail = user.data.email;
-      const profileData = yield call(api.getProfileRequest, userId, "user");
-      const contacts = yield call(api.getOwnContactsRequest, userId);
+
+      yield getCurrentProfileWorker({ payload: { userId } });
+      yield getOwnContactsWorker({ payload: { userId } });
+      yield getContactsWorker({ payload: { from: 0, to: 10, page: 1 } });
+      yield getTransactionListWorker({ payload: { userId } });
+
       yield put(actions.setUserDataAC({ id: userId, email: userEmail }));
-      yield put(actions.setProfileDataAC(profileData.data[0], true));
-      yield put(actions.setContactsAC(contactsParser(contacts.data)));
-      yield put(actions.getTransactionListAC(userId));
       yield put(actions.setIsAuthAC(true));
     } catch (e) {
       yield put(actions.setErrorUserAC(e));

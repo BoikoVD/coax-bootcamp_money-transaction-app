@@ -3,6 +3,16 @@ import * as types from '../types/types';
 import * as actions from '../actions/actions';
 import * as api from '../../services/apiService';
 
+export function* getCurrentProfileWorker({ payload }) {
+  const { userId } = payload;
+  try {
+    const profileData = yield call(api.getProfileRequest, userId);
+    yield put(actions.setProfileDataAC(profileData.data[0], true));
+  } catch (e) {
+    console.log("GET CURRENT PROFILE SAGA ERROR", e, e?.response);
+  }
+};
+
 function* profilePageWorker({ payload }) {
   yield put(actions.setIsLoadingProfileAC(true));
   const { id } = payload;

@@ -1,0 +1,66 @@
+.wrapper {
+	max-width: 1000px;
+	margin: 0 auto !important;
+}
+
+.title {
+	display: flex;
+	justify-content: space-between;
+
+	font-size: 20px;
+	font-weight: 500;
+}
+
+.link {
+	font-size: 14px;
+
+	@media (any-hover: hover) {
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+.body {
+	display: flex;
+
+	width: 100%;
+	height: 100%;
+}
+
+.balanceContainer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	width: 100%;
+	height: 100%;
+}
+
+.balanceTitle {
+	font-size: 20px;
+	font-weight: 500;
+}
+
+.balance {
+	width: 100%;
+	margin-top: 30px;
+	margin-bottom: 30px;
+
+	text-align: center;
+	white-space: nowrap;
+
+	color: #1890FF;
+
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 36px;
+}
+
+.transferBody {
+	overflow-x: auto;
+}
+
+.table {
+	margin-top: 20px;
+}

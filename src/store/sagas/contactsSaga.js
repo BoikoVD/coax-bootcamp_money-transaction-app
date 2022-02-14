@@ -2,9 +2,19 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import * as types from '../types/types';
 import * as actions from '../actions/actions';
 import * as api from '../../services/apiService';
-import { pageCountHelper } from '../../helpers/helpers';
+import { contactsParser, pageCountHelper } from '../../helpers/helpers';
 
-function* getContactsWorker({ payload }) {
+export function* getOwnContactsWorker({ payload }) {
+  const { userId } = payload;
+  try {
+    const contacts = yield call(api.getOwnContactsRequest, userId);
+    yield put(actions.setContactsAC(contactsParser(contacts.data)));
+  } catch (e) {
+    console.log("GET OWN CONTACTS SAGA ERROR", e, e?.response);
+  }
+};
+
+export function* getContactsWorker({ payload }) {
   yield put(actions.isLoadingContactsAC());
   const { from, to, page } = payload;
   yield put(actions.setPaginationAC(page));

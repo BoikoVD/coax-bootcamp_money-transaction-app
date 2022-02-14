@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal, Spin, Form } from 'antd';
 import * as actions from '../../store/actions/actions';
 import SendmoneyForm from '../SendMoneyForm/SendMoneyForm';
 import classes from './SendMoneyButton.module.scss';
 
-function SendMoneyButton({ profile }) {
+function SendMoneyButton({ children, profile, className }) {
   const user = useSelector(state => state.userReducer.userData);
   const transactionsData = useSelector(state => state.transactionsReducer);
   const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+
+  const buttonStyles = className ? cn(classes.button, className) : classes.button;
 
   const createTransaction = ({ amount }) => {
     dispatch(actions.createTransactionAC(user.id, profile.user, amount));
@@ -28,13 +31,13 @@ function SendMoneyButton({ profile }) {
   return (
     <>
       <Button
-        type="primary"
+        type={children ? "text" : "primary"}
         size="middle"
         disabled={profile.isLoading}
         onClick={sendMoneyHandle}
-        className={classes.button}
+        className={buttonStyles}
       >
-        Send money
+        {children ? children : "Send money"}
       </Button>
       <Modal
         visible={modal.isModalVisible && modal.modalType === profile.id}
@@ -67,6 +70,7 @@ function SendMoneyButton({ profile }) {
 }
 
 SendMoneyButton.propTypes = {
+  children: PropTypes.any,
   profile: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,
@@ -75,7 +79,8 @@ SendMoneyButton.propTypes = {
     email: PropTypes.string,
     created_at: PropTypes.string,
     isLoading: PropTypes.bool
-  })
+  }),
+  className: PropTypes.string
 };
 
 export default SendMoneyButton;

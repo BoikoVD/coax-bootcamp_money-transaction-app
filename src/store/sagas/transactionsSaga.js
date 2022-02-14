@@ -53,9 +53,10 @@ function* createTransactionWorker({ payload }) {
   yield put(actions.isModalLoadingAC());
 };
 
-function* getTransactionListWorker({ payload }) {
+export function* getTransactionListWorker({ payload }) {
   yield put(actions.isLoadingTransactionsAC());
   const { userId } = payload;
+  console.log(userId);
   try {
     const fromTransactions = yield call(api.getTransactionsRequest, userId, "from");
     const toTransactions = yield call(api.getTransactionsRequest, userId, "to");

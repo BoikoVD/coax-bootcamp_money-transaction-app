@@ -1,0 +1,28 @@
+.button {
+	display: flex !important;
+	align-items: center !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+
+	width: 100px !important;
+
+	height: 120px !important;
+	margin: 0 5px !important;
+}
+
+.avatar {
+	width: 50px;
+	height: 50px;
+}
+
+.firstName {
+	margin-top: 5px;
+
+	font-size: 14px;
+	line-height: 14px;
+}
+
+.lastName {
+	font-size: 14px;
+	line-height: 14px;
+}
