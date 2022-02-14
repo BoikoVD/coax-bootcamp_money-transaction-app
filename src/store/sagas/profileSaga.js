@@ -98,9 +98,7 @@ function* addContactWorker({ payload }) {
     const user = yield select(s => s.userReducer.userData);
     const response = yield call(api.addContactRequest, user.id, id);
 
-    //===CONTACTS=========================================================================================================================
-    yield put(actions.setOneContactAC(response.data[0].contact));
-    //===CONTACTS=========================================================================================================================
+    yield put(actions.addContactSuccessAC(response.data[0].contact));
     yield put(actions.addThisUserToContactSuccessAC());
   } catch (e) {
     yield put(actions.addThisUserToContactErrorAC());
@@ -118,9 +116,7 @@ function* deleteContactWorker({ payload }) {
 
     const newContacts = userContacts.filter((i) => i !== id);
 
-    //===CONTACTS=========================================================================================================================
-    yield put(actions.setContactsAC(newContacts));
-    //===CONTACTS=========================================================================================================================
+    yield put(actions.deleteContactSuccessAC(newContacts));
     yield put(actions.deleteThisUserFromContactsSuccessAC());
   } catch (e) {
     yield put(actions.deleteThisUserFromContactsErrorAC());

@@ -11,30 +11,9 @@ const defaultState = {
 
 export default function contactsReducer(state = defaultState, action) {
   switch (action.type) {
-    case types.IS_LOADING_CONTACTS:
-      return {
-        ...state, isLoading: !state.isLoading
-      }
-    case types.IS_LOADING_ONE_PROFILE:
-      return {
-        ...state, profiles: state.profiles.map((p) => {
-          if (p.user === action.payload.id) {
-            return { ...p, isLoading: action.payload.isLoading }
-          }
-          return p;
-        })
-      }
-    case types.SET_ONE_CONTACT:
-      return {
-        ...state, userContacts: [...state.userContacts, action.payload]
-      }
     case types.SET_CONTACTS:
       return {
-        ...state, userContacts: action.payload
-      }
-    case types.SET_CONTACT_PROFILES:
-      return {
-        ...state, profiles: action.payload.profiles, itemsCount: action.payload.itemsCount
+        ...state, userContacts: action.payload.contacts
       }
     case types.SET_PAGINATION:
       return {
@@ -43,6 +22,86 @@ export default function contactsReducer(state = defaultState, action) {
     case types.SET_ITEMS_COUNT_OF_PAGINATION:
       return {
         ...state, itemsCount: action.payload.itemsCount
+      }
+    case types.GET_CONTACTS:
+      return {
+        ...state, isLoading: true
+      }
+    case types.GET_CONTACTS_SUCCESS:
+      return {
+        ...state, profiles: action.payload.profiles, itemsCount: action.payload.itemsCount, isLoading: false
+      }
+    case types.GET_CONTACTS_ERROR:
+      return {
+        ...state, isLoading: false
+      }
+    case types.GET_ALL_PROFILES:
+      return {
+        ...state, isLoading: true
+      }
+    case types.GET_ALL_PROFILES_SUCCESS:
+      return {
+        ...state, profiles: action.payload.profiles, itemsCount: action.payload.itemsCount, isLoading: false
+      }
+    case types.GET_ALL_PROFILES_ERROR:
+      return {
+        ...state, isLoading: false
+      }
+    case types.ADD_CONTACT:
+      return {
+        ...state, profiles: state.profiles.map((p) => {
+          if (p.user === action.payload.id) {
+            return { ...p, isLoading: true }
+          }
+          return p;
+        })
+      }
+    case types.ADD_CONTACT_SUCCESS:
+      return {
+        ...state, profiles: state.profiles.map((p) => {
+          if (p.user === action.payload.contactId) {
+            return { ...p, isLoading: false }
+          }
+          return p;
+        }),
+        userContacts: [...state.userContacts, action.payload.contactId]
+      }
+    case types.ADD_CONTACT_ERROR:
+      return {
+        ...state, profiles: state.profiles.map((p) => {
+          if (p.user === action.payload.id) {
+            return { ...p, isLoading: false }
+          }
+          return p;
+        })
+      }
+    case types.DELETE_CONTACT:
+      return {
+        ...state, profiles: state.profiles.map((p) => {
+          if (p.user === action.payload.id) {
+            return { ...p, isLoading: true }
+          }
+          return p;
+        })
+      }
+    case types.DELETE_CONTACT_SUCCESS:
+      return {
+        ...state, profiles: state.profiles.map((p) => {
+          if (p.user === action.payload.id) {
+            return { ...p, isLoading: false }
+          }
+          return p;
+        }),
+        userContacts: action.payload.contacts
+      }
+    case types.DELETE_CONTACT_ERROR:
+      return {
+        ...state, profiles: state.profiles.map((p) => {
+          if (p.user === action.payload.id) {
+            return { ...p, isLoading: false }
+          }
+          return p;
+        })
       }
     default:
       return state;

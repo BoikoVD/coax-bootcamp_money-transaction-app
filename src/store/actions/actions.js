@@ -1,31 +1,13 @@
 import * as types from '../types/types';
 
-export const setOneContactAC = (contactId) => ({ type: types.SET_ONE_CONTACT, payload: contactId });
-export const setContactsAC = (contacts) => ({ type: types.SET_CONTACTS, payload: contacts });
-export const isLoadingContactsAC = () => ({ type: types.IS_LOADING_CONTACTS, payload: null });
-export const setContactProfilesAC = (profiles, itemsCount, activePagination) => ({ type: types.SET_CONTACT_PROFILES, payload: { profiles, itemsCount, activePagination } });
-export const setPaginationAC = (activePagination) => ({ type: types.SET_PAGINATION, payload: { activePagination } });
-export const setItemsCountOfPaginationAC = (itemsCount) => ({ type: types.SET_ITEMS_COUNT_OF_PAGINATION, payload: { itemsCount } });
-export const isLoadingOneProfileAC = (id, isLoading) => ({ type: types.IS_LOADING_ONE_PROFILE, payload: { id, isLoading } });
-
 export const isLoadingTransactionsAC = () => ({ type: types.IS_LOADING_TRANSACTIONS, payload: null });
 export const transactionSuccessAC = (newBalance) => ({ type: types.TRANSACTION_SUCCESS, payload: { newBalance } });
 export const setTransactionListAC = (list, newBalance) => ({ type: types.SET_TRANSACTION_LIST, payload: { list, newBalance } });
 export const setErrorTransactionAC = (error) => ({ type: types.SET_ERROR_TRANSACTION, payload: error });
 
 //saga
-
-
-export const getContactsAC = (from, to, page) => ({ type: types.GET_CONTACTS, payload: { from, to, page } });
-export const getAllProfilesAC = (from, to, page) => ({ type: types.GET_ALL_PROFILES, payload: { from, to, page } });
-export const addContactAC = (id) => ({ type: types.ADD_CONTACT, payload: { id } });
-export const deleteContactAC = (id) => ({ type: types.DELETE_CONTACT, payload: { id } });
-
 export const createTransactionAC = (from, to, amount) => ({ type: types.CREATE_TRANSACTION, payload: { from, to, amount } });
 export const getTransactionListAC = (userId) => ({ type: types.GET_TRANSACTION_LIST, payload: { userId } });
-
-
-
 
 
 ///===================================
@@ -53,6 +35,23 @@ export const addThisUserToContactErrorAC = () => ({ type: types.ADD_THIS_USER_TO
 export const deleteThisUserFromContactsAC = (id) => ({ type: types.DELETE_THIS_USER_FROM_CONTACTS, payload: { id } });
 export const deleteThisUserFromContactsSuccessAC = (id) => ({ type: types.DELETE_THIS_USER_FROM_CONTACTS_SUCCESS, payload: { id } });
 export const deleteThisUserFromContactsErrorAC = (id) => ({ type: types.DELETE_THIS_USER_FROM_CONTACTS_ERROR, payload: { id } });
+
+export const setContactsAC = (contacts) => ({ type: types.SET_CONTACTS, payload: contacts }); //check
+export const setPaginationAC = (activePagination) => ({ type: types.SET_PAGINATION, payload: { activePagination } });
+export const setItemsCountOfPaginationAC = (itemsCount) => ({ type: types.SET_ITEMS_COUNT_OF_PAGINATION, payload: { itemsCount } });
+export const getContactsAC = (from, to, page) => ({ type: types.GET_CONTACTS, payload: { from, to, page } });
+export const getContactsSuccessAC = (profiles, itemsCount) => ({ type: types.GET_CONTACTS_SUCCESS, payload: { profiles, itemsCount } });
+export const getContactsErrorAC = () => ({ type: types.GET_CONTACTS_ERROR });
+export const getAllProfilesAC = (from, to, page) => ({ type: types.GET_ALL_PROFILES, payload: { from, to, page } });
+export const getAllProfilesSuccessAC = (profiles, itemsCount) => ({ type: types.GET_ALL_PROFILES_SUCCESS, payload: { profiles, itemsCount } });
+export const getAllProfilesErrorAC = () => ({ type: types.GET_ALL_PROFILES_ERROR });
+export const addContactAC = (id) => ({ type: types.ADD_CONTACT, payload: { id } });
+export const addContactSuccessAC = (contactId, id) => ({ type: types.ADD_CONTACT_SUCCESS, payload: { contactId, id } });
+export const addContactErrorAC = (id) => ({ type: types.ADD_CONTACT_ERROR, payload: { id } });
+export const deleteContactAC = (id) => ({ type: types.DELETE_CONTACT, payload: { id } });
+export const deleteContactSuccessAC = (contacts, id) => ({ type: types.DELETE_CONTACT_SUCCESS, payload: { contacts, id } });
+export const deleteContactErrorAC = (id) => ({ type: types.DELETE_CONTACT_ERROR, payload: { id } });
+
 
 //modal
 export const openModalAC = (type) => ({ type: types.OPEN_MODAL, payload: { type } });

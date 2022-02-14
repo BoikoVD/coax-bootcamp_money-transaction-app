@@ -1,23 +1,23 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { contactsParser, pageCountHelper } from '../../helpers/helpers';
 import * as types from '../types/types';
 import * as actions from '../actions/actions';
 import * as api from '../../services/apiService';
-import { contactsParser, pageCountHelper } from '../../helpers/helpers';
 
 export function* getOwnContactsWorker({ payload }) {
   const { userId } = payload;
   try {
     const contacts = yield call(api.getOwnContactsRequest, userId);
-    yield put(actions.setContactsAC(contactsParser(contacts.data)));
+    yield put(actions.deleteContactSuccessAC(contactsParser(contacts.data)));
   } catch (e) {
     console.log("GET OWN CONTACTS SAGA ERROR", e, e?.response);
   }
 };
 
 export function* getContactsWorker({ payload }) {
-  yield put(actions.isLoadingContactsAC());
   const { from, to, page } = payload;
   yield put(actions.setPaginationAC(page));
+
   try {
     const userContacts = yield select(s => s.contactsReducer.userContacts);
     let response;
@@ -26,60 +26,65 @@ export function* getContactsWorker({ payload }) {
     } else {
       response = yield call(api.getContactProfilesRequest, userContacts);
     }
+
     const profiles = response.data.map((i) => {
       return { ...i, isLoading: false }
     });
-    yield put(actions.setContactProfilesAC(profiles, userContacts.length));
+
+    yield put(actions.getContactsSuccessAC(profiles, userContacts.length));
   } catch (e) {
-    console.log("GET CONTACTS SAGA ERROR", e);
+    yield put(actions.getContactsErrorAC());
+    console.log("GET CONTACTS SAGA ERROR", e, e?.responsee);
   }
-  yield put(actions.isLoadingContactsAC());
 };
 
 function* getAllProfilesWorker({ payload }) {
-  yield put(actions.isLoadingContactsAC());
   const { from, to, page } = payload;
   yield put(actions.setPaginationAC(page));
+
   try {
     const response = yield call(api.getProfilesWithPaginationRequest, from, to);
-    const profiles = yield response.data.map((i) => {
+    const profiles = response.data.map((i) => {
       return { ...i, isLoading: false }
     });
-    const itemsCount = yield pageCountHelper(response.headers["content-range"]);
-    yield put(actions.setContactProfilesAC(profiles, itemsCount));
+    const itemsCount = pageCountHelper(response.headers["content-range"]);
+
+    yield put(actions.getAllProfilesSuccessAC(profiles, itemsCount));
   } catch (e) {
-    console.log("GET ALLUSERS SAGA ERROR", e);
+    yield put(actions.getAllProfilesErrorAC());
+    console.log("GET ALLUSERS SAGA ERROR", e, e?.response);
   }
-  yield put(actions.isLoadingContactsAC());
 };
 
 function* addContactWorker({ payload }) {
   const { id } = payload;
-  yield put(actions.isLoadingOneProfileAC(id, true));
+
   try {
     const user = yield select(s => s.userReducer.userData);
     const response = yield call(api.addContactRequest, user.id, id);
-    console.log(response.data[0].contact);
-    yield put(actions.setOneContactAC(response.data[0].contact));
+
+    yield put(actions.addContactSuccessAC(response.data[0].contact, id));
   } catch (e) {
-    console.log("ADD CONTACT SAGA ERROR: ", e.response.data);
+    yield put(actions.addContactErrorAC(id));
+    console.log("ADD CONTACT SAGA ERROR: ", e, e?.response);
   }
-  yield put(actions.isLoadingOneProfileAC(id, false));
 };
 
 function* deleteContactWorker({ payload }) {
   const { id } = payload;
-  yield put(actions.isLoadingOneProfileAC(id, true));
+
   try {
     const user = yield select(s => s.userReducer.userData);
     const userContacts = yield select(s => s.contactsReducer.userContacts);
     yield call(api.deleteContactRequest, user.id, id);
+
     const newContacts = userContacts.filter((i) => i !== id);
-    yield put(actions.setContactsAC(newContacts));
+
+    yield put(actions.deleteContactSuccessAC(newContacts, id));
   } catch (e) {
-    console.log("ADD CONTACT SAGA ERROR: ", e.response.data);
+    yield put(actions.deleteContactErrorAC(id));
+    console.log("ADD CONTACT SAGA ERROR: ", e, e?.response);
   }
-  yield put(actions.isLoadingOneProfileAC(id, false));
 };
 
 export function* contactsSaga() {

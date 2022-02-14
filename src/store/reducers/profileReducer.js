@@ -23,7 +23,7 @@ export default function profileReducer(state = defaultState, action) {
       }
     case types.GET_PROFILE_SUCCESS:
       return {
-        ...state, profileData: action.payload.profileData, isCurrent: action.payload.isCurrent
+        ...state, profileData: action.payload.profileData, isCurrent: action.payload.isCurrent, isLoading: false
       }
     case types.GET_PROFILE_ERROR:
       return {
@@ -43,27 +43,27 @@ export default function profileReducer(state = defaultState, action) {
       }
     case types.ADD_THIS_USER_TO_CONTACTS:
       return {
-        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+        ...state, profileData: { ...state.profileData, isLoading: true }
       }
     case types.ADD_THIS_USER_TO_CONTACTS_SUCCESS:
       return {
-        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+        ...state, profileData: { ...state.profileData, isLoading: false }
       }
     case types.ADD_THIS_USER_TO_CONTACTS_ERROR:
       return {
-        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+        ...state, profileData: { ...state.profileData, isLoading: false }
       }
     case types.DELETE_THIS_USER_FROM_CONTACTS:
       return {
-        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+        ...state, profileData: { ...state.profileData, isLoading: true }
       }
     case types.DELETE_THIS_USER_FROM_CONTACTS_SUCCESS:
       return {
-        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+        ...state, profileData: { ...state.profileData, isLoading: false }
       }
     case types.DELETE_THIS_USER_FROM_CONTACTS_ERROR:
       return {
-        ...state, profileData: { ...state.profileData, isLoading: !state.profileData.isLoading }
+        ...state, profileData: { ...state.profileData, isLoading: false }
       }
     default:
       return state;
