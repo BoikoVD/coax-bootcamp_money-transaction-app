@@ -4,6 +4,8 @@ export const loginAC = (email, password, remember) => ({ type: types.LOGIN, payl
 export const loginSuccessAC = (userData) => ({ type: types.LOGIN_SUCCESS, payload: { userData } });
 export const loginErrorAC = (error) => ({ type: types.LOGIN_ERROR, payload: { error } });
 export const logoutAC = () => ({ type: types.LOGOUT });
+export const logoutSuccessAC = () => ({ type: types.LOGOUT_SUCCESS });
+export const logoutErrorAC = (error) => ({ type: types.LOGOUT_ERROR, payload: { error } });
 export const checkAuthAC = () => ({ type: types.CHECK_AUTH });
 export const checkAuthSuccessAC = (isAuth, userData) => ({ type: types.CHECK_AUTH_SUCCESS, payload: { isAuth, userData } });
 export const checkAuthErrorAC = (error) => ({ type: types.CHECK_AUTH_ERROR, payload: { error } });

@@ -38,7 +38,18 @@ function* loginWorker({ payload }) {
 };
 
 function* logoutWorker() {
-  yield Cookies.remove('accessToken');
+  try {
+    yield call(api.logoutRequest);
+    //yield Cookies.remove('accessToken');
+    yield put(actions.logoutSuccessAC());
+  } catch (e) {
+    yield put(actions.setModalMessageAC(
+      `Something is wrong. Please try again later!`,
+      "error"
+    ));
+    yield put(actions.logoutErrorAC(e));
+    console.log('LOGOUT SAGA ERROR: ', e, e?.response);
+  }
 };
 
 function* checkAuthWorker() {

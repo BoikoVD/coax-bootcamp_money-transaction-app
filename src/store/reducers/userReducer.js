@@ -26,7 +26,15 @@ export default function userReducer(state = defaultState, action) {
       }
     case types.LOGOUT:
       return {
-        ...state, userData: { id: null, email: null }, isAuth: false
+        ...state, isLoading: true
+      }
+    case types.LOGOUT_SUCCESS:
+      return {
+        ...state, userData: { id: null, email: null }, isAuth: false, isLoading: false
+      }
+    case types.LOGOUT_ERROR:
+      return {
+        ...state, error: action.payload.error, isLoading: false
       }
     case types.CHECK_AUTH:
       return {

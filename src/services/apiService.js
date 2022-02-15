@@ -10,6 +10,16 @@ export const loginRequest = async (email, password) => {
   });
 };
 
+export const logoutRequest = async () => {
+  return await userApi.post(`/logout`, {}, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+    }
+  }).then((res) => {
+    return res;
+  });
+};
+
 export const signUpRequest = async (email, password) => {
   return await userApi.post(`/signup`, {
     email,

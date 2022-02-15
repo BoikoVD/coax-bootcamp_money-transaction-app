@@ -1,9 +1,10 @@
 import React from 'react';
 import cn from 'classnames';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { format, toDate } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { Col, Row, Table } from 'antd';
+import { Col, Row, Table, message } from 'antd';
+import * as actions from '../../store/actions/actions';
 import Container from '../../components/Container/Container';
 import SmallContactCard from '../../components/SmallContactCard/SmallContactCard';
 import classes from './Dashboard.module.scss';
@@ -11,6 +12,8 @@ import classes from './Dashboard.module.scss';
 function Dashboard() {
   const transactionsData = useSelector(state => state.transactionsReducer);
   const contactsData = useSelector(state => state.contactsReducer);
+  const modal = useSelector(state => state.modalReducer);
+  const dispatch = useDispatch();
 
   const transactions = transactionsData.transactions.slice(0, 5);
 
@@ -61,6 +64,23 @@ function Dashboard() {
       key: 'email',
     },
   ];
+
+  React.useEffect(() => {
+    dispatch(actions.getContactsAC(0, 10));
+  }, []);
+
+  React.useEffect(() => {
+    if (modal.modalMessage) {
+      if (modal.modalMessageType === "error") {
+        message.error(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
+      if (modal.modalMessageType === "success") {
+        message.success(modal.modalMessage, 5);
+        dispatch(actions.removeModalMessageAC());
+      }
+    }
+  }, [modal.modalMessage]);
 
   return (
     <>
