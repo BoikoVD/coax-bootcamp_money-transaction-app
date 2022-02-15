@@ -40,7 +40,7 @@ function* loginWorker({ payload }) {
 function* logoutWorker() {
   try {
     yield call(api.logoutRequest);
-    //yield Cookies.remove('accessToken');
+    yield Cookies.remove('accessToken');
     yield put(actions.logoutSuccessAC());
   } catch (e) {
     yield put(actions.setModalMessageAC(
