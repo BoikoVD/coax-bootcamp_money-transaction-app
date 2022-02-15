@@ -60,8 +60,14 @@ function* createTransactionWorker({ payload }) {
       "success"
     ));
   } catch (e) {
+    let msg;
+    if (e.message) {
+      msg = e.message
+    } else {
+      msg = "Something is wrong. Please try again later!";
+    }
     yield put(actions.setModalMessageAC(
-      "Something is wrong. Please try again later!",
+      msg,
       "error"
     ));
     console.log("CREATE TRANSACTION SAGA ERROR: ", e, e.response);

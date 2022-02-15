@@ -1,4 +1,4 @@
-.card-container  {
+.card-container {
   margin: 0 auto;
   max-width: 1000px;
   height: 100%;
@@ -7,7 +7,7 @@
   display: flex;
   height: 100%;
 }
-.ant-tabs-content{
+.ant-tabs-content {
   height: 100%;
 }
 .ant-tabs-content-holder {
