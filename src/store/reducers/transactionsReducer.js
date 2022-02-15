@@ -15,7 +15,7 @@ export default function transactionsReducer(state = defaultState, action) {
       }
     case types.CREATE_TRANSACTION_SUCCESS:
       return {
-        ...state, balance: action.payload.newBalance, isLoading: false
+        ...state, transactions: action.payload.newTransactions, balance: action.payload.newBalance, isLoading: false
       }
     case types.CREATE_TRANSACTION_ERROR:
       return {

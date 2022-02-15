@@ -5,6 +5,7 @@ import * as api from '../../services/apiService';
 import { removeDuplicates } from '../../helpers/helpers';
 
 function* createTransactionWorker({ payload }) {
+  yield put(actions.isModalLoadingAC());
   const { from, to, amount } = payload;
 
   try {
@@ -37,10 +38,22 @@ function* createTransactionWorker({ payload }) {
       throw new Error("Not enough money in your wallet");
     }
 
-    const newTransaction = yield call(api.createTransactionRequest, from, to, amount);
+    const newTransactionResponse = yield call(api.createTransactionRequest, from, to, amount);
+    let newTransaction = newTransactionResponse.data[0];
+
+    const profile = yield call(api.getProfileRequest, newTransaction.to);
+    newTransaction.firstName = profile.data[0].firstName;
+    newTransaction.lastName = profile.data[0].lastName;
+    newTransaction.email = profile.data[0].email;
+    newTransaction.created_at = Date.parse(newTransaction.created_at);
+    newTransaction.amount = "- " + newTransaction.amount;
+    newTransaction.key = newTransaction.id;
+    const currentTransactions = yield select(s => s.transactionsReducer.transactions);
+
+    const newTransactions = [newTransaction, ...currentTransactions];
     const newBalance = Number((balance - amount).toFixed(2));
 
-    yield put(actions.createTransactionSuccessAC(newBalance));
+    yield put(actions.createTransactionSuccessAC(newTransactions, newBalance));
     yield put(actions.closeModalAC());
     yield put(actions.setModalMessageAC(
       "The transaction was completed successfully!",
@@ -53,6 +66,7 @@ function* createTransactionWorker({ payload }) {
     ));
     console.log("CREATE TRANSACTION SAGA ERROR: ", e, e.response);
   }
+  yield put(actions.isModalLoadingAC());
 };
 
 export function* getTransactionListWorker({ payload }) {

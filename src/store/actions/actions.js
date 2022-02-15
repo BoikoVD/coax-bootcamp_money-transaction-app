@@ -42,7 +42,7 @@ export const deleteContactSuccessAC = (contacts, id) => ({ type: types.DELETE_CO
 export const deleteContactErrorAC = (id) => ({ type: types.DELETE_CONTACT_ERROR, payload: { id } });
 
 export const createTransactionAC = (from, to, amount) => ({ type: types.CREATE_TRANSACTION, payload: { from, to, amount } });
-export const createTransactionSuccessAC = (newBalance) => ({ type: types.CREATE_TRANSACTION_SUCCESS, payload: { newBalance } });
+export const createTransactionSuccessAC = (newTransactions, newBalance) => ({ type: types.CREATE_TRANSACTION_SUCCESS, payload: { newTransactions, newBalance } });
 export const createTransactionErrorAC = () => ({ type: types.CREATE_TRANSACTION_ERROR });
 export const getTransactionListAC = (userId) => ({ type: types.GET_TRANSACTION_LIST, payload: { userId } });
 export const getTransactionListSuccessAC = (list, newBalance) => ({ type: types.GET_TRANSACTION_LIST_SUCCESS, payload: { list, newBalance } });
