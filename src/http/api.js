@@ -1,17 +1,17 @@
 import axios from 'axios';
 
-const API_AUTH_URL = process.env.React_App_SUPABASE_URL + '/auth/v1';
-const API_PROFILE_URL = process.env.React_App_SUPABASE_URL + '/rest/v1';
+const AUTH_API_URL = process.env.React_App_SUPABASE_URL + '/auth/v1';
+const REST_API_URL = process.env.React_App_SUPABASE_URL + '/rest/v1';
 
-export const userApi = axios.create({
-  baseURL: API_AUTH_URL,
+export const authApi = axios.create({
+  baseURL: AUTH_API_URL,
   headers: {
     'apikey': process.env.React_App_API_KEY
   }
 });
 
-export const profileApi = axios.create({
-  baseURL: API_PROFILE_URL,
+export const restApi = axios.create({
+  baseURL: REST_API_URL,
   headers: {
     'apikey': process.env.React_App_API_KEY
   }

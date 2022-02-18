@@ -1,8 +1,8 @@
 import Cookies from 'js-cookie';
-import { userApi, profileApi } from '../http/api';
+import { authApi, restApi } from '../http/api';
 
 export const loginRequest = async (email, password) => {
-  return await userApi.post(`/token?grant_type=password`, {
+  return await authApi.post(`/token?grant_type=password`, {
     email,
     password
   }).then((res) => {
@@ -11,7 +11,7 @@ export const loginRequest = async (email, password) => {
 };
 
 export const logoutRequest = async () => {
-  return await userApi.post(`/logout`, {}, {
+  return await authApi.post(`/logout`, {}, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -21,7 +21,7 @@ export const logoutRequest = async () => {
 };
 
 export const signUpRequest = async (email, password) => {
-  return await userApi.post(`/signup`, {
+  return await authApi.post(`/signup`, {
     email,
     password
   }).then((res) => {
@@ -30,7 +30,7 @@ export const signUpRequest = async (email, password) => {
 };
 
 export const getUserRequest = async () => {
-  return await userApi.get(`/user`, {
+  return await authApi.get(`/user`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -40,7 +40,7 @@ export const getUserRequest = async () => {
 };
 
 export const resetPasswordRequest = async (newPassword) => {
-  return await userApi.put(`/user`, {
+  return await authApi.put(`/user`, {
     password: newPassword
   }, {
     headers: {
@@ -52,7 +52,7 @@ export const resetPasswordRequest = async (newPassword) => {
 };
 
 export const getProfileRequest = async (id) => {
-  return await profileApi.get(`/profile?user=eq.${id}&select=*`, {
+  return await restApi.get(`/profile?user=eq.${id}&select=*`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -61,21 +61,22 @@ export const getProfileRequest = async (id) => {
   });
 };
 
-export const getProfilesWithPaginationRequest = async (from, to) => {
-  return await profileApi.get(`/profile?select=*`, {
+export const getProfilesWithPaginationRequest = async (from, to, currentUserId) => {
+  return await restApi.get(`/profile?select=*&user=neq.${currentUserId}`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`,
       'Prefer': `count=exact,head=true`,
       'Range': `${from}-${to}`
     }
   }).then((res) => {
+    console.log(res);
     return res;
   });
 };
 
 export const getContactProfilesRequest = async (arrayOfId) => {
   const strOfId = arrayOfId.join(",");
-  return await profileApi.get(`/profile?user=in.(${strOfId})&select=*`, {
+  return await restApi.get(`/profile?user=in.(${strOfId})&select=*`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -85,7 +86,7 @@ export const getContactProfilesRequest = async (arrayOfId) => {
 };
 
 export const getAllProfilesRequest = async () => {
-  return await profileApi.get(`/profile?select=*`, {
+  return await restApi.get(`/profile?select=*`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -95,7 +96,7 @@ export const getAllProfilesRequest = async () => {
 };
 
 export const createProfileRequest = async (userId, email, firstName, lastName, accessToken) => {
-  return await profileApi.post(`/profile`, {
+  return await restApi.post(`/profile`, {
     firstName,
     lastName,
     user: userId,
@@ -110,7 +111,7 @@ export const createProfileRequest = async (userId, email, firstName, lastName, a
 };
 
 export const updateProfileDataRequest = async (newFirstName, newLastName, profileId) => {
-  return profileApi.patch(`/profile?id=eq.${profileId}`, {
+  return restApi.patch(`/profile?id=eq.${profileId}`, {
     firstName: newFirstName,
     lastName: newLastName,
   }, {
@@ -123,7 +124,7 @@ export const updateProfileDataRequest = async (newFirstName, newLastName, profil
 };
 
 export const addContactRequest = async (owner, contact) => {
-  return profileApi.post(`/contact`, {
+  return restApi.post(`/contact`, {
     owner,
     contact
   }, {
@@ -137,7 +138,7 @@ export const addContactRequest = async (owner, contact) => {
 };
 
 export const deleteContactRequest = async (owner, contact) => {
-  return profileApi.delete(`/contact?owner=eq.${owner}&contact=eq.${contact}`, {
+  return restApi.delete(`/contact?owner=eq.${owner}&contact=eq.${contact}`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -147,7 +148,7 @@ export const deleteContactRequest = async (owner, contact) => {
 };
 
 export const getOwnContactsRequest = async (ownerId) => {
-  return profileApi.get(`/contact?owner=eq.${ownerId}&select=contact`, {
+  return restApi.get(`/contact?owner=eq.${ownerId}&select=contact`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -157,7 +158,7 @@ export const getOwnContactsRequest = async (ownerId) => {
 };
 
 export const createTransactionRequest = async (from, to, amount) => {
-  return profileApi.post(`/transaction`, {
+  return restApi.post(`/transaction`, {
     from,
     to,
     amount
@@ -172,7 +173,7 @@ export const createTransactionRequest = async (from, to, amount) => {
 };
 
 export const getTransactionsRequest = async (id, column) => {
-  return profileApi.get(`/transaction?${column}=eq.${id}&select=*`, {
+  return restApi.get(`/transaction?${column}=eq.${id}&select=*`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }

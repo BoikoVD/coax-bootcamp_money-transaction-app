@@ -43,7 +43,8 @@ function* getAllProfilesWorker({ payload }) {
   yield put(actions.setPaginationAC(page));
 
   try {
-    const response = yield call(api.getProfilesWithPaginationRequest, from, to);
+    const userData = yield select(s => s.userReducer.userData);
+    const response = yield call(api.getProfilesWithPaginationRequest, from, to, userData.id);
     const profiles = response.data.map((i) => {
       return { ...i, isLoading: false }
     });
