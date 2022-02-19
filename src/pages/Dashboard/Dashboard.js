@@ -3,8 +3,9 @@ import cn from 'classnames';
 import { useSelector, useDispatch } from 'react-redux';
 import { format, toDate } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { Col, Row, Table, message } from 'antd';
+import { Col, Row, Table, message, Spin } from 'antd';
 import * as actions from '../../store/actions/actions';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 import Container from '../../components/Container/Container';
 import SmallContactCard from '../../components/SmallContactCard/SmallContactCard';
 import classes from './Dashboard.module.scss';
@@ -14,6 +15,7 @@ function Dashboard() {
   const contactsData = useSelector(state => state.contactsReducer);
   const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
+  const { width } = useWindowDimensions();
 
   const transactions = transactionsData.transactions.slice(0, 5);
 
@@ -83,10 +85,10 @@ function Dashboard() {
   }, [modal.modalMessage]);
 
   return (
-    <>
-      <Row gutter={[15, 15]} className={classes.wrapper}>
+    <div className={classes.wrapper}>
+      <Row gutter={[15, 15]} className={classes.content}>
         <Col
-          xl={{ span: 5 }}
+          xs={{ span: 24 }} sm={{ span: 8 }} md={{ span: 8 }} lg={{ span: 6 }} xl={{ span: 5 }}
         >
           <Container className={classes.balanceContainer}>
             <div className={classes.title}>
@@ -98,21 +100,33 @@ function Dashboard() {
           </Container>
         </Col>
         <Col
-          xl={{ span: 19 }}
+          xs={{ span: 24 }} sm={{ span: 16 }} md={{ span: 16 }} lg={{ span: 18 }} xl={{ span: 19 }}
         >
           <Container className={classes.transferContainer}>
             <div className={classes.title}>
               <div>Quick transfer</div><Link to="/contacts" className={classes.link}>View all</Link>
             </div>
             <div className={cn(classes.body, classes.transferBody)}>
-              {contactsData.profiles.map((p) => {
-                return <SmallContactCard profile={p} key={p.id} />
-              })}
+              {contactsData.isLoading
+                ?
+                <div className={classes.spin}>
+                  <Spin size="large" />
+                </div>
+                :
+                contactsData.profiles.length === 0
+                  ?
+                  <div className={classes.spin}>
+                    No data
+                  </div>
+                  :
+                  contactsData.profiles.map((p) => {
+                    return <SmallContactCard profile={p} key={p.id} />
+                  })}
             </div>
           </Container>
         </Col>
         <Col
-          xl={{ span: 24 }}
+          xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 24 }} xl={{ span: 24 }}
         >
           <Container>
             <div className={classes.title}>
@@ -122,13 +136,15 @@ function Dashboard() {
               columns={tableColumns}
               dataSource={transactions}
               pagination={false}
-              tableLayout="auto"
+              scroll={{ x: 700 }}
+              tableLayout="fixed"
               className={classes.table}
+              size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
             />
           </Container>
         </Col>
       </Row>
-    </>
+    </div>
   )
 }
 

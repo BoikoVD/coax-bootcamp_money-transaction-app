@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Spin, Pagination, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 import ContactCard from '../../components/ContactCard/ContactCard';
 import classes from './ContactsTabBody.module.scss';
 
 function ContactsTabBody({ paginationHandler, searchValue, setSearchValue }) {
   const contactsData = useSelector(state => state.contactsReducer);
+  const { width } = useWindowDimensions();
 
   const buildProfileCards = (arrayOfProfiles) => {
     if (arrayOfProfiles.length === 0) {
@@ -26,7 +28,12 @@ function ContactsTabBody({ paginationHandler, searchValue, setSearchValue }) {
   return (
     <div className={classes.content}>
       <div className={classes.search}>
-        <Input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} prefix={<SearchOutlined />} />
+        <Input
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          placeholder={"Search..."}
+          prefix={<SearchOutlined />}
+        />
       </div>
       <div className={classes.bodyWrapper}>
         {
@@ -48,6 +55,7 @@ function ContactsTabBody({ paginationHandler, searchValue, setSearchValue }) {
           onChange={paginationHandler}
           hideOnSinglePage={true}
           showSizeChanger={false}
+          size={width < 575 ? "small" : "default"}
         />
       </div>
     </div >

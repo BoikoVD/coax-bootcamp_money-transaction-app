@@ -2,11 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { format, toDate } from 'date-fns';
 import { Table } from 'antd';
+import useWindowDimensions from '../../hooks/useWindowDimensions';
 import Container from '../../components/Container/Container';
 import classes from './Transactions.module.scss';
 
 function Transactions() {
   const transactionsData = useSelector(state => state.transactionsReducer);
+  const { width } = useWindowDimensions();
 
   let arrayOfEmails = [];
   for (let t of transactionsData.transactions) {
@@ -101,6 +103,7 @@ function Transactions() {
         dataSource={transactionsData.transactions}
         scroll={{ x: 700 }}
         tableLayout="fixed"
+        size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
       />
     </Container>
   )

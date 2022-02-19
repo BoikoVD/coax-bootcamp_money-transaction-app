@@ -34,10 +34,10 @@ function ContactCard({ profile }) {
           </Link>
         </div>
         <div className={classes.info}>
-          Email: <span>{profile.email}</span>
+          <p>Email: <span>{profile.email}</span></p>
         </div>
         <div className={classes.info}>
-          Registered: <span>{format(parseJSON(profile.created_at), "dd.MM.yyyy")}</span>
+          <p>Registered: <span>{format(parseJSON(profile.created_at), "dd.MM.yyyy")}</span></p>
         </div>
       </Col>
       <Col xs={{ span: 24 }} sm={{ span: 6 }} md={{ span: 6 }} lg={{ span: 6 }}>
