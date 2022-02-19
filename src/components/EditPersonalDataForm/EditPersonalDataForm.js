@@ -14,6 +14,7 @@ function EditPersonalDataForm({ form, firstName, lastName }) {
       <Form.Item
         name="newFirstName"
         label="First name"
+        required={false}
         initialValue={firstName}
         rules={validationRules.firstNameRules}
       >
@@ -22,6 +23,7 @@ function EditPersonalDataForm({ form, firstName, lastName }) {
       <Form.Item
         name="newLastName"
         label="Last name"
+        required={false}
         initialValue={lastName}
         rules={validationRules.lastNameRules}
       >

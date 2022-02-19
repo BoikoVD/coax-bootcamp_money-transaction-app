@@ -2,6 +2,25 @@
 	height: 100vh;
 }
 
+.skipLink {
+	position: fixed;
+	z-index: 50;
+	top: 0;
+	left: 0;
+
+	display: block;
+	overflow: hidden;
+
+	height: 0;
+
+	color: #FFF;
+	background: #1890FF;
+}
+
+.displayed {
+	height: auto;
+}
+
 .header {
 	padding: 0 20px !important;
 
@@ -12,7 +31,7 @@
 	font-size: 24px;
 	font-weight: 700;
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		position: fixed;
 		z-index: 2;
 		top: 0;
@@ -30,7 +49,7 @@
 .content {
 	background-color: #F8F9FD;
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -45,7 +64,7 @@
 	height: 100%;
 	padding: 20px;
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 		padding: 84px 20px 20px;
 	}
 

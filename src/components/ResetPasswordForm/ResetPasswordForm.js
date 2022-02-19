@@ -14,6 +14,7 @@ function ResetPasswordForm({ form }) {
       <Form.Item
         name="newPassword"
         label="New password"
+        required={false}
         rules={validationRules.regPasswordRules}
       >
         <Input.Password />
@@ -21,6 +22,7 @@ function ResetPasswordForm({ form }) {
       <Form.Item
         name="confirmNewPassword"
         label="Confirm new password"
+        required={false}
         dependencies={["newPassword"]}
         rules={validationRules.resetConfiirmPasswordRules}
       >
