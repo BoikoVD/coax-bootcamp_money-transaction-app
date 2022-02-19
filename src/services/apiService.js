@@ -61,24 +61,25 @@ export const getProfileRequest = async (id) => {
   });
 };
 
-export const getProfilesWithPaginationRequest = async (from, to, currentUserId) => {
-  return await restApi.get(`/profile?select=*&user=neq.${currentUserId}`, {
+export const getProfilesOfContactsRequest = async (from, to, searchText, arrayOfId) => {
+  const strOfId = arrayOfId.join(",");
+  return await restApi.get(`/profile?select=*&user=in.%28${strOfId}%29&or=%28firstName.ilike.%25${searchText}%25%2ClastName.ilike.%25${searchText}%25%2Cemail.ilike.%25${searchText}%25%29`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`,
       'Prefer': `count=exact,head=true`,
       'Range': `${from}-${to}`
     }
   }).then((res) => {
-    console.log(res);
     return res;
   });
 };
 
-export const getContactProfilesRequest = async (arrayOfId) => {
-  const strOfId = arrayOfId.join(",");
-  return await restApi.get(`/profile?user=in.(${strOfId})&select=*`, {
+export const getProfilesOfAllUsersRequest = async (from, to, searchText, currentUserId) => {
+  return await restApi.get(`/profile?select=*&or=%28firstName.ilike.%25${searchText}%25%2ClastName.ilike.%25${searchText}%25%2Cemail.ilike.%25${searchText}%25%29&user=neq.${currentUserId}`, {
     headers: {
-      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`,
+      'Prefer': `count=exact,head=true`,
+      'Range': `${from}-${to}`
     }
   }).then((res) => {
     return res;
@@ -87,6 +88,17 @@ export const getContactProfilesRequest = async (arrayOfId) => {
 
 export const getAllProfilesRequest = async () => {
   return await restApi.get(`/profile?select=*`, {
+    headers: {
+      'Authorization': `Bearer ${Cookies.get("accessToken")}`
+    }
+  }).then((res) => {
+    return res;
+  });
+};
+
+export const getProfilesForTransactionsRequest = async (arrayOfId) => {
+  const strOfId = arrayOfId.join(",");
+  return await restApi.get(`/profile?user=in.(${strOfId})&select=*`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }
@@ -123,10 +135,10 @@ export const updateProfileDataRequest = async (newFirstName, newLastName, profil
   });
 };
 
-export const addContactRequest = async (owner, contact) => {
+export const addContactRequest = async (ownerId, contactId) => {
   return restApi.post(`/contact`, {
-    owner,
-    contact
+    owner: ownerId,
+    contact: contactId
   }, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`,
@@ -137,8 +149,8 @@ export const addContactRequest = async (owner, contact) => {
   });
 };
 
-export const deleteContactRequest = async (owner, contact) => {
-  return restApi.delete(`/contact?owner=eq.${owner}&contact=eq.${contact}`, {
+export const deleteContactRequest = async (ownerId, contactId) => {
+  return restApi.delete(`/contact?owner=eq.${ownerId}&contact=eq.${contactId}`, {
     headers: {
       'Authorization': `Bearer ${Cookies.get("accessToken")}`
     }

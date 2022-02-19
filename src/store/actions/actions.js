@@ -30,12 +30,9 @@ export const deleteThisUserFromContactsErrorAC = (id) => ({ type: types.DELETE_T
 export const setContactsAC = (contacts) => ({ type: types.SET_CONTACTS, payload: contacts }); //check
 export const setPaginationAC = (activePagination) => ({ type: types.SET_PAGINATION, payload: { activePagination } });
 export const setItemsCountOfPaginationAC = (itemsCount) => ({ type: types.SET_ITEMS_COUNT_OF_PAGINATION, payload: { itemsCount } });
-export const getContactsAC = (from, to, page) => ({ type: types.GET_CONTACTS, payload: { from, to, page } });
-export const getContactsSuccessAC = (profiles, itemsCount) => ({ type: types.GET_CONTACTS_SUCCESS, payload: { profiles, itemsCount } });
-export const getContactsErrorAC = () => ({ type: types.GET_CONTACTS_ERROR });
-export const getAllProfilesAC = (from, to, page) => ({ type: types.GET_ALL_PROFILES, payload: { from, to, page } });
-export const getAllProfilesSuccessAC = (profiles, itemsCount) => ({ type: types.GET_ALL_PROFILES_SUCCESS, payload: { profiles, itemsCount } });
-export const getAllProfilesErrorAC = () => ({ type: types.GET_ALL_PROFILES_ERROR });
+export const getProfilesForContactsAC = (page, searchValue, type) => ({ type: types.GET_PROFILES_FOR_CONTACTS, payload: { page, searchValue, type } });
+export const getProfilesForContactsSuccessAC = (profiles, itemsCount) => ({ type: types.GET_PROFILES_FOR_CONTACTS_SUCCESS, payload: { profiles, itemsCount } });
+export const getProfilesForContactsErrorAC = () => ({ type: types.GET_PROFILES_FOR_CONTACTS_ERROR });
 export const addContactAC = (id) => ({ type: types.ADD_CONTACT, payload: { id } });
 export const addContactSuccessAC = (contactId, id) => ({ type: types.ADD_CONTACT_SUCCESS, payload: { contactId, id } });
 export const addContactErrorAC = (id) => ({ type: types.ADD_CONTACT_ERROR, payload: { id } });

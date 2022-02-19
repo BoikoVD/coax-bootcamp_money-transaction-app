@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import { getTransactionListWorker } from './transactionsSaga';
-import { getOwnContactsWorker, getContactsWorker } from './contactsSaga';
+import { getOwnContactsWorker, getProfilesForContactsWorker } from './contactsSaga';
 import { getCurrentProfileWorker } from './profileSaga';
 import * as types from '../types/types';
 import * as actions from '../actions/actions';
@@ -23,7 +23,7 @@ function* loginWorker({ payload }) {
 
     yield getCurrentProfileWorker({ payload: { userId } });
     yield getOwnContactsWorker({ payload: { userId } });
-    yield getContactsWorker({ payload: { from: 0, to: 10, page: 1 } });
+    yield getProfilesForContactsWorker({ payload: { page: 1, searchValue: "", type: "myContacts" } });
     yield getTransactionListWorker({ payload: { userId } });
 
     yield put(actions.loginSuccessAC({ id: userId, email: userEmail }));
@@ -62,7 +62,7 @@ function* checkAuthWorker() {
 
       yield getCurrentProfileWorker({ payload: { userId } });
       yield getOwnContactsWorker({ payload: { userId } });
-      yield getContactsWorker({ payload: { from: 0, to: 10, page: 1 } });
+      yield getProfilesForContactsWorker({ payload: { page: 1, searchValue: "", type: "myContacts" } });
       yield getTransactionListWorker({ payload: { userId } });
 
       yield put(actions.checkAuthSuccessAC(true, { id: userId, email: userEmail }));

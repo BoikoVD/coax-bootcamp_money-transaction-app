@@ -121,7 +121,7 @@ export function* getTransactionListWorker({ payload }) {
       }
     };
 
-    const profiles = yield call(api.getContactProfilesRequest, profilesId);
+    const profiles = yield call(api.getProfilesForTransactionsRequest, profilesId);
     transactions = transactions.map((t) => {
       for (let p of profiles.data) {
         if (p.user === t.from || p.user === t.to) {

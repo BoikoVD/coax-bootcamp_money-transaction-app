@@ -66,7 +66,7 @@ function Dashboard() {
   ];
 
   React.useEffect(() => {
-    dispatch(actions.getContactsAC(0, 10));
+    dispatch(actions.getProfilesForContactsAC(1, "", "myContacts"));
   }, []);
 
   React.useEffect(() => {

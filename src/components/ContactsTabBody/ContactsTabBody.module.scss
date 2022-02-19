@@ -50,3 +50,14 @@
 	margin-top: 15px;
 	margin-bottom: 15px;
 }
+
+.search {
+	display: flex;
+	justify-content: center;
+
+	margin-bottom: 10px;
+
+	span {
+		max-width: 400px;
+	}
+}

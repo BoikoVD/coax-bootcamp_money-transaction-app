@@ -8,35 +8,39 @@ import './Contacts.css';
 const { TabPane } = Tabs;
 
 function Contacts() {
+  const [searchValue, setSearchValue] = React.useState('');
   const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
 
   const tabHandler = (key) => {
-    dispatch(actions.setPaginationAC(1));
     dispatch(actions.setItemsCountOfPaginationAC(1));
 
     if (key === "myContacts") {
-      dispatch(actions.getContactsAC(0, 10, 1));
+      dispatch(actions.getProfilesForContactsAC(1, searchValue, "myContacts"));
     };
     if (key === "allUsers") {
-      dispatch(actions.getAllProfilesAC(0, 9, 1));
+      dispatch(actions.getProfilesForContactsAC(1, searchValue, "allUsers"));
     };
   };
 
-  const paginationAllUsersHandler = (page) => {
-    const from = (page * 10) - 1 - 9;
-    const to = (page * 10) - 1;
-    dispatch(actions.getAllProfilesAC(from, to, page));
-  };
+  const searchContactsProfiles = (value) => {
+    dispatch(actions.getProfilesForContactsAC(1, value, "myContacts"));
+    setSearchValue(value);
+  }
+  const searchUserProfiles = (value) => {
+    dispatch(actions.getProfilesForContactsAC(1, value, "allUsers"));
+    setSearchValue(value);
+  }
 
   const paginationMyContactsHandler = (page) => {
-    const to = page * 10;
-    const from = to - 10;
-    dispatch(actions.getContactsAC(from, to, page));
+    dispatch(actions.getProfilesForContactsAC(page, searchValue, "myContacts"));
+  };
+  const paginationAllUsersHandler = (page) => {
+    dispatch(actions.getProfilesForContactsAC(page, searchValue, "allUsers"));
   };
 
   React.useEffect(() => {
-    dispatch(actions.getContactsAC(0, 10));
+    dispatch(actions.getProfilesForContactsAC(1, searchValue, "myContacts"));
   }, []);
 
   React.useEffect(() => {
@@ -57,11 +61,15 @@ function Contacts() {
       <Tabs type="card" onChange={tabHandler}>
         <TabPane tab="My contacts" key="myContacts" >
           <ContactsTabBody
+            searchValue={searchValue}
+            setSearchValue={searchContactsProfiles}
             paginationHandler={paginationMyContactsHandler}
           />
         </TabPane>
         <TabPane tab="All users" key="allUsers" >
           <ContactsTabBody
+            searchValue={searchValue}
+            setSearchValue={searchUserProfiles}
             paginationHandler={paginationAllUsersHandler}
           />
         </TabPane>

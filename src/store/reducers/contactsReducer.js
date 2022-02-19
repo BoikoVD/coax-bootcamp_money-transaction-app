@@ -23,27 +23,15 @@ export default function contactsReducer(state = defaultState, action) {
       return {
         ...state, itemsCount: action.payload.itemsCount
       }
-    case types.GET_CONTACTS:
+    case types.GET_PROFILES_FOR_CONTACTS:
       return {
         ...state, isLoading: true
       }
-    case types.GET_CONTACTS_SUCCESS:
+    case types.GET_PROFILES_FOR_CONTACTS_SUCCESS:
       return {
         ...state, profiles: action.payload.profiles, itemsCount: action.payload.itemsCount, isLoading: false
       }
-    case types.GET_CONTACTS_ERROR:
-      return {
-        ...state, isLoading: false
-      }
-    case types.GET_ALL_PROFILES:
-      return {
-        ...state, isLoading: true
-      }
-    case types.GET_ALL_PROFILES_SUCCESS:
-      return {
-        ...state, profiles: action.payload.profiles, itemsCount: action.payload.itemsCount, isLoading: false
-      }
-    case types.GET_ALL_PROFILES_ERROR:
+    case types.GET_PROFILES_FOR_CONTACTS_ERROR:
       return {
         ...state, isLoading: false
       }

@@ -1,4 +1,4 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { contactsParser, pageCountHelper } from '../../helpers/helpers';
 import * as types from '../types/types';
 import * as actions from '../actions/actions';
@@ -14,46 +14,33 @@ export function* getOwnContactsWorker({ payload }) {
   }
 };
 
-export function* getContactsWorker({ payload }) {
-  const { from, to, page } = payload;
+export function* getProfilesForContactsWorker({ payload }) {
+  const { searchValue, page, type } = payload;
+  const from = (page * 10) - 1 - 9;
+  const to = (page * 10) - 1;
   yield put(actions.setPaginationAC(page));
 
   try {
-    const userContacts = yield select(s => s.contactsReducer.userContacts);
     let response;
-    if (userContacts.length > 10) {
-      response = yield call(api.getContactProfilesRequest, userContacts.slice(from, to));
-    } else {
-      response = yield call(api.getContactProfilesRequest, userContacts);
+    if (type === "myContacts") {
+      const userContacts = yield select(s => s.contactsReducer.userContacts);
+      response = yield call(api.getProfilesOfContactsRequest, from, to, searchValue, userContacts);
+    }
+    if (type === "allUsers") {
+      const userData = yield select(s => s.userReducer.userData);
+      response = yield call(api.getProfilesOfAllUsersRequest, from, to, searchValue, userData.id);
     }
 
     const profiles = response.data.map((i) => {
       return { ...i, isLoading: false }
     });
 
-    yield put(actions.getContactsSuccessAC(profiles, userContacts.length));
-  } catch (e) {
-    yield put(actions.getContactsErrorAC());
-    console.log("GET CONTACTS SAGA ERROR", e, e?.responsee);
-  }
-};
-
-function* getAllProfilesWorker({ payload }) {
-  const { from, to, page } = payload;
-  yield put(actions.setPaginationAC(page));
-
-  try {
-    const userData = yield select(s => s.userReducer.userData);
-    const response = yield call(api.getProfilesWithPaginationRequest, from, to, userData.id);
-    const profiles = response.data.map((i) => {
-      return { ...i, isLoading: false }
-    });
     const itemsCount = pageCountHelper(response.headers["content-range"]);
 
-    yield put(actions.getAllProfilesSuccessAC(profiles, itemsCount));
+    yield put(actions.getProfilesForContactsSuccessAC(profiles, itemsCount));
   } catch (e) {
-    yield put(actions.getAllProfilesErrorAC());
-    console.log("GET ALLUSERS SAGA ERROR", e, e?.response);
+    yield put(actions.getProfilesForContactsErrorAC());
+    console.log("GET CONTACTS SAGA ERROR", e, e?.responsee);
   }
 };
 
@@ -89,8 +76,7 @@ function* deleteContactWorker({ payload }) {
 };
 
 export function* contactsSaga() {
-  yield takeEvery(types.GET_CONTACTS, getContactsWorker);
-  yield takeEvery(types.GET_ALL_PROFILES, getAllProfilesWorker);
+  yield takeLatest(types.GET_PROFILES_FOR_CONTACTS, getProfilesForContactsWorker);
   yield takeEvery(types.ADD_CONTACT, addContactWorker);
   yield takeEvery(types.DELETE_CONTACT, deleteContactWorker);
 };

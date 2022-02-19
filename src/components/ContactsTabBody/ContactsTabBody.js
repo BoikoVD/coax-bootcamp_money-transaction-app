@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { Spin, Pagination } from 'antd';
+import { Spin, Pagination, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import ContactCard from '../../components/ContactCard/ContactCard';
 import classes from './ContactsTabBody.module.scss';
 
-function ContactsTabBody({ paginationHandler }) {
+function ContactsTabBody({ paginationHandler, searchValue, setSearchValue }) {
   const contactsData = useSelector(state => state.contactsReducer);
 
   const buildProfileCards = (arrayOfProfiles) => {
@@ -24,6 +25,9 @@ function ContactsTabBody({ paginationHandler }) {
 
   return (
     <div className={classes.content}>
+      <div className={classes.search}>
+        <Input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} prefix={<SearchOutlined />} />
+      </div>
       <div className={classes.bodyWrapper}>
         {
           contactsData.isLoading
@@ -51,7 +55,9 @@ function ContactsTabBody({ paginationHandler }) {
 }
 
 ContactsTabBody.propTypes = {
-  paginationHandler: PropTypes.func.isRequired
+  paginationHandler: PropTypes.func.isRequired,
+  searchValue: PropTypes.string.isRequired,
+  setSearchValue: PropTypes.func.isRequired
 }
 
 export default ContactsTabBody;
