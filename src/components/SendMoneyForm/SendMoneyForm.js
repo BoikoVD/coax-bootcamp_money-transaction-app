@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Input } from 'antd';
-import * as validationRules from '../../helpers/antdValidatorRules';
+import NumberFormat from 'react-number-format';
+import { Form } from 'antd';
+import * as validationRules from '../../helpers/antdValidatorRules.js';
+import classes from './SendMoneyForm.module.scss';
 
 function SendMoneyForm({ form }) {
 
@@ -9,6 +11,7 @@ function SendMoneyForm({ form }) {
     <Form
       form={form}
       name="transactionForm"
+      layout="horizontal"
     >
       <Form.Item
         name="amount"
@@ -16,7 +19,13 @@ function SendMoneyForm({ form }) {
         required={false}
         rules={validationRules.amountRules}
       >
-        <Input />
+        <NumberFormat
+          decimalScale={2}
+          fixedDecimalScale={true}
+          allowNegative={false}
+          placeholder="0.00"
+          className={classes.input}
+        />
       </Form.Item>
     </Form>
   )

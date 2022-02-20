@@ -77,6 +77,6 @@ export const amountRules = [
         ?
         Promise.resolve()
         :
-        Promise.reject(`You entered the wrong format. Correct format is "0.00"`))
+        Promise.reject(`Correct format is "0.00"`))
   }
 ];

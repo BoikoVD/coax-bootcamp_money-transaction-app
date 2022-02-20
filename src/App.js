@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import * as actions from './store/actions/actions';
 import AppRouter from './router/AppRouter';
-import './assets/styles/App.less';
+import './App.less';
 
 function App() {
   const userData = useSelector(state => state.userReducer);
