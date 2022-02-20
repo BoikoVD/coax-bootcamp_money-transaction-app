@@ -1,8 +1,8 @@
 import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { removeDuplicates } from '../../helpers/helpers';
 import * as types from '../types/types';
 import * as actions from '../actions/actions';
 import * as api from '../../services/apiService';
-import { removeDuplicates } from '../../helpers/helpers';
 
 function* createTransactionWorker({ payload }) {
   yield put(actions.isModalLoadingAC());

@@ -13,6 +13,7 @@ import classes from './Dashboard.module.scss';
 function Dashboard() {
   const transactionsData = useSelector(state => state.transactionsReducer);
   const contactsData = useSelector(state => state.contactsReducer);
+  const userData = useSelector(state => state.userReducer.userData);
   const modal = useSelector(state => state.modalReducer);
   const dispatch = useDispatch();
   const { width } = useWindowDimensions();
@@ -69,6 +70,7 @@ function Dashboard() {
 
   React.useEffect(() => {
     dispatch(actions.getProfilesForContactsAC(1, "", "myContacts"));
+    dispatch(actions.getTransactionListAC(userData.id));
   }, []);
 
   React.useEffect(() => {
@@ -95,7 +97,15 @@ function Dashboard() {
               <div className={classes.balanceTitle}>Your balance</div>
             </div>
             <div className={classes.body}>
-              <div className={classes.balance}>{transactionsData.balance} $</div>
+              <div className={classes.balance}>
+                {transactionsData.isLoading
+                  ?
+                  <div className={classes.spin}>
+                    <Spin size="default" />
+                  </div>
+                  :
+                  transactionsData.balance + "$"}
+              </div>
             </div>
           </Container>
         </Col>
@@ -110,7 +120,7 @@ function Dashboard() {
               {contactsData.isLoading
                 ?
                 <div className={classes.spin}>
-                  <Spin size="large" />
+                  <Spin size="default" />
                 </div>
                 :
                 contactsData.profiles.length === 0
@@ -132,15 +142,21 @@ function Dashboard() {
             <div className={classes.title}>
               <div>Recent transactions</div><Link to="/transactions" className={classes.link}>View all</Link>
             </div>
-            <Table
-              columns={tableColumns}
-              dataSource={transactions}
-              pagination={false}
-              scroll={{ x: 700 }}
-              tableLayout="fixed"
-              className={classes.table}
-              size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
-            />
+            {transactionsData.isLoading
+              ?
+              <div className={classes.spin}>
+                <Spin size="default" />
+              </div>
+              :
+              <Table
+                columns={tableColumns}
+                dataSource={transactions}
+                pagination={false}
+                scroll={{ x: 700 }}
+                tableLayout="fixed"
+                className={classes.table}
+                size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
+              />}
           </Container>
         </Col>
       </Row>

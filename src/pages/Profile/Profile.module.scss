@@ -4,18 +4,20 @@
 	margin: 0 auto;
 }
 
+.spiner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 100%;
+	height: 100%;
+}
+
 .wrapper {
 	display: flex;
 	align-items: center;
 
 	width: 100%;
-}
-
-.avatarWrapper {
-	// @media (max-width: 575px){
-	//   display: flex !important;
-	//   justify-content: center;
-	// }
 }
 
 .avatar {
@@ -46,15 +48,6 @@
 	@media (max-width: 992px) {
 		padding-left: 10px;
 	}
-
-	// @media (max-width: 575px){
-	//   display: flex !important;
-	//   justify-content: center;
-	// }
-	// @media (max-width: 400px){
-	//   padding-left: 0px;
-	//   justify-content: flex-start;
-	// }
 }
 
 .infoBlock {
@@ -86,16 +79,9 @@
 }
 
 .balanceWrapper {
-	// display: flex;
-	// flex-direction: column;
-	// align-items: center;
 	@media (max-width: 575px) {
 		margin-top: 15px;
 	}
-
-	// @media (max-width: 400px){
-	//   justify-content: flex-start;
-	// }
 }
 
 .balanceTitle {

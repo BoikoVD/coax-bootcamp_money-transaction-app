@@ -54,13 +54,7 @@ function Profile() {
   return (
     profile.isLoading
       ?
-      <div style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: "100%"
-      }}>
+      <div className={classes.spiner}>
         <Spin size="large" />
       </div>
       :

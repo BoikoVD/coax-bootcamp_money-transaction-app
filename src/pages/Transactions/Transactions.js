@@ -1,13 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { format, toDate } from 'date-fns';
-import { Table } from 'antd';
+import { Table, Spin } from 'antd';
+import * as actions from '../../store/actions/actions';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import Container from '../../components/Container/Container';
 import classes from './Transactions.module.scss';
 
 function Transactions() {
   const transactionsData = useSelector(state => state.transactionsReducer);
+  const userData = useSelector(state => state.userReducer.userData);
+  const dispatch = useDispatch();
   const { width } = useWindowDimensions();
 
   let arrayOfEmails = [];
@@ -96,15 +99,25 @@ function Transactions() {
     },
   ];
 
+  React.useEffect(() => {
+    dispatch(actions.getTransactionListAC(userData.id));
+  }, []);
+
   return (
     <Container className={classes.container}>
-      <Table
-        columns={tableColumns}
-        dataSource={transactionsData.transactions}
-        scroll={{ x: 700 }}
-        tableLayout="fixed"
-        size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
-      />
+      {transactionsData.isLoading
+        ?
+        <div className={classes.spiner}>
+          <Spin size="large" />
+        </div>
+        :
+        <Table
+          columns={tableColumns}
+          dataSource={transactionsData.transactions}
+          scroll={{ x: 700 }}
+          tableLayout="fixed"
+          size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
+        />}
     </Container>
   )
 }

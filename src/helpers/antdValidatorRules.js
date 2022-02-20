@@ -3,23 +3,53 @@ import isCurrency from 'validator/es/lib/isCurrency';
 
 export const emailRules = [
   { required: true, message: 'Please input your email!' },
-  { whitespace: true, message: 'Please input your email!' },
-  { type: 'email', message: 'Please enter a valid email!' }
+  { type: 'email', message: 'Please enter a valid email!' },
+  {
+    validator: (_, value) => (
+      !value.includes(" ")
+        ?
+        Promise.resolve()
+        :
+        Promise.reject('Email input cannot contain whitespace'))
+  }
 ];
 export const firstNameRules = [
   { required: true, message: 'Please input your first name!' },
-  { whitespace: true, message: 'Please input your first name!' },
+  {
+    validator: (_, value) => (
+      !value.includes(" ")
+        ?
+        Promise.resolve()
+        :
+        Promise.reject('First name input cannot contain whitespace'))
+  }
 ];
 export const lastNameRules = [
   { required: true, message: 'Please input your last name!' },
-  { whitespace: true, message: 'Please input your last name!' },
+  {
+    validator: (_, value) => (
+      !value.includes(" ")
+        ?
+        Promise.resolve()
+        :
+        Promise.reject('Last name input cannot contain whitespace'))
+  }
 ];
 export const loginPasswordRules = [
   { required: true, message: 'Please input your password!' },
   { min: 8, message: 'Minimum number of characters 8' },
+  {
+    validator: (_, value) => (
+      !value.includes(" ")
+        ?
+        Promise.resolve()
+        :
+        Promise.reject('Password input cannot contain whitespace'))
+  }
 ];
 export const regPasswordRules = [
   { required: true, message: 'Please input your password!' },
+  { whitespace: true, message: 'Password cannot start with space!' },
   { min: 8, message: 'Minimum number of characters 8' },
   {
     validator: (_, value) => (
@@ -28,6 +58,14 @@ export const regPasswordRules = [
         Promise.resolve()
         :
         Promise.reject('Password must contain (0-9), (A-z), (@#$%^&*)'))
+  },
+  {
+    validator: (_, value) => (
+      !value.includes(" ")
+        ?
+        Promise.resolve()
+        :
+        Promise.reject('Password input cannot contain whitespace'))
   }
 ];
 export const regConfiirmPasswordRules = [

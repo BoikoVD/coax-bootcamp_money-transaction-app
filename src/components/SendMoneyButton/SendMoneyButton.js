@@ -55,9 +55,6 @@ function SendMoneyButton({ children, profile, className }) {
               form.resetFields();
               createTransaction(values);
             })
-            .catch((info) => {
-              console.log('Validate Failed:', info);
-            });
         }}
       >
         <div className={classes.title}><span>{profile.firstName + " " + profile.lastName}</span></div>
