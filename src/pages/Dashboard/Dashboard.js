@@ -98,13 +98,7 @@ function Dashboard() {
             </div>
             <div className={classes.body}>
               <div className={classes.balance}>
-                {transactionsData.isLoading
-                  ?
-                  <div className={classes.spin}>
-                    <Spin size="default" />
-                  </div>
-                  :
-                  transactionsData.balance + "$"}
+                {transactionsData.balance + "$"}
               </div>
             </div>
           </Container>
@@ -142,21 +136,15 @@ function Dashboard() {
             <div className={classes.title}>
               <div>Recent transactions</div><Link to="/transactions" className={classes.link}>View all</Link>
             </div>
-            {transactionsData.isLoading
-              ?
-              <div className={classes.spin}>
-                <Spin size="default" />
-              </div>
-              :
-              <Table
-                columns={tableColumns}
-                dataSource={transactions}
-                pagination={false}
-                scroll={{ x: 700 }}
-                tableLayout="fixed"
-                className={classes.table}
-                size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
-              />}
+            <Table
+              columns={tableColumns}
+              dataSource={transactions}
+              pagination={false}
+              scroll={{ x: 700 }}
+              tableLayout="fixed"
+              className={classes.table}
+              size={width < 575 ? "small" : width > 992 ? "large" : "middle"}
+            />
           </Container>
         </Col>
       </Row>

@@ -14,8 +14,8 @@ function Container({ children, className }) {
 }
 
 Container.propTypes = {
-  children: PropTypes.any,
-  className: PropTypes.any,
+  children: PropTypes.node,
+  className: PropTypes.string,
 }
 
 export default Container;
