@@ -1,4 +1,4 @@
-$${\color{red}DEPRECATED}$$
+${\color{red}DEPRECATED}$
 
 # Money Transaction Application
 
