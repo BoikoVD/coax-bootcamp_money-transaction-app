@@ -1,4 +1,4 @@
-$${\color{red}DEPRECATED}$$ - API is no longer supported
+$${\color{red}DEPRECATED}$$
 
 # Money Transaction Application
 
